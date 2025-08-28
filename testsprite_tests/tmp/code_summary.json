@@ -1,0 +1,40 @@
+{
+  "tech_stack": ["typescript", "react", "astro", "nanostores"],
+  "features": [
+    {
+      "name": "store",
+      "description": "Centralized state management using nanostores",
+      "files": ["src/store/index.ts"]
+    },
+    {
+      "name": "counter",
+      "description": "Simple counter state management",
+      "files": ["src/store/index.ts"]
+    },
+    {
+      "name": "navigation",
+      "description": "Route management and navigation state",
+      "files": ["src/store/index.ts"]
+    },
+    {
+      "name": "notifications",
+      "description": "Notification state management",
+      "files": ["src/store/index.ts"]
+    },
+    {
+      "name": "authentication",
+      "description": "User authentication state management",
+      "files": ["src/store/index.ts"]
+    },
+    {
+      "name": "theme",
+      "description": "Theme management (dark/light mode)",
+      "files": ["src/store/index.ts"]
+    },
+    {
+      "name": "loading",
+      "description": "Loading state management",
+      "files": ["src/store/index.ts"]
+    }
+  ]
+}

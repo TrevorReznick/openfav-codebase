@@ -1,10 +1,20 @@
-import { expect } from 'vitest';
+import { expect, afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
 import matchers from '@testing-library/jest-dom/matchers';
 
-// Extend Vitest's expect with jest-dom matchers
+// Estendi expect di Vitest con i matcher di jest-dom
 expect.extend(matchers);
 
-// Mock any browser APIs or global variables your tests might need
-global.ResizeObserver = require('resize-observer-polyfill');
+// Mock per ResizeObserver
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
 
-// Setup any test utilities or mocks here
+global.ResizeObserver = ResizeObserverStub;
+
+// Pulisci dopo ogni test
+afterEach(() => {
+  cleanup();
+});

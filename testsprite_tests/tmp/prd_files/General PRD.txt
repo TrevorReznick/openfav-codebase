@@ -1,0 +1,186 @@
+Product Requirements Document (PRD) - OpenFav V6
+1. Overview
+OpenFav is a modern web application that provides a platform for users to organize and manage their digital resources. The application features a responsive design with theme customization, user authentication, and dynamic content loading.
+
+2. Core Features
+2.1 Theme System
+Light/Dark Mode Toggle
+
+Support for system preference detection
+
+Manual theme selection (Light/Dark/System)
+
+Persistent theme preferences
+
+Smooth theme transitions
+
+2.2 Authentication
+User Authentication
+
+Email/Password login
+
+Social login (Google)
+
+Session management
+
+Protected routes
+
+User profile management
+
+2.3 Navigation
+Client-side routing
+
+History management
+
+Protected routes
+
+Breadcrumb navigation
+
+Responsive navigation menu
+
+2.4 UI Components
+ThemeToggle: Switch between light/dark modes
+
+Navbar: Main navigation bar with responsive design
+
+AuthForm: Authentication forms (login/signup)
+
+DynamicWrapper: For code-splitting and lazy loading
+
+Loading States: Visual feedback during data fetching
+
+3. Technical Requirements
+3.1 Frontend
+Framework: React 18+
+
+Language: TypeScript
+
+Styling: Tailwind CSS with custom theming
+
+State Management: Context API + Nanostores
+
+Routing: Client-side routing with history API
+
+Form Handling: React Hook Form
+
+HTTP Client: Custom wrapper around fetch/axios
+
+3.2 Backend Integration
+Authentication: Supabase Auth
+
+API: RESTful endpoints
+
+Session Management: JWT-based authentication
+
+Error Handling: Global error boundaries and toast notifications
+
+3.3 Performance
+Code splitting with React.lazy
+
+Dynamic imports for routes
+
+Optimized bundle size
+
+Lazy loading of non-critical components
+
+4. User Flows
+4.1 Authentication Flow
+User lands on the login page
+
+User can choose between email/password or social login
+
+Upon successful authentication, user is redirected to dashboard
+
+Session is maintained across page refreshes
+
+4.2 Theme Switching
+User clicks theme toggle in the header
+
+System shows available theme options (Light/Dark/System)
+
+Selection is saved to localStorage
+
+Theme is applied immediately with smooth transition
+
+4.3 Navigation
+User clicks on a navigation link
+
+Application shows loading state
+
+Required components are loaded dynamically
+
+Page transitions are animated
+
+Browser history is updated
+
+5. Non-Functional Requirements
+5.1 Performance
+First Contentful Paint (FCP) < 1.5s
+
+Time to Interactive (TTI) < 3s
+
+Bundle size < 150KB gzipped
+
+5.2 Accessibility
+WCAG 2.1 AA compliance
+
+Keyboard navigation
+
+Screen reader support
+
+Color contrast ratios
+
+5.3 Browser Support
+Latest Chrome, Firefox, Safari, and Edge
+
+Mobile Safari and Chrome for Android
+
+IE11 is not supported
+
+6. Future Enhancements
+Offline support with Service Workers
+
+PWA installation
+
+Advanced theming options
+
+User preferences sync across devices
+
+Enhanced analytics
+
+7. Technical Dependencies
+React 18+
+
+TypeScript 4.9+
+
+Tailwind CSS 3.3+
+
+Supabase Auth
+
+Vite/Rollup for bundling
+
+Vitest for testing
+
+8. Development Guidelines
+Follow Atomic Design principles
+
+Use functional components with hooks
+
+Implement proper TypeScript types
+
+Write unit tests for all components
+
+Document all public APIs
+
+Follow semantic versioning
+
+9. Testing Strategy
+Unit tests for all utility functions
+
+Component tests with React Testing Library
+
+Integration tests for critical user flows
+
+E2E tests with Cypress
+
+Visual regression testing
