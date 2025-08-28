@@ -1,0 +1,58 @@
+Dependency Analysis Across Workspaces
+Here's a comparison of the main dependencies across the different workspaces, excluding the specified directory:
+
+1. openfav-V6
+Core:
+React 18.3.1
+Astro 5.5.2
+TypeScript (implicit)
+Tailwind CSS 3.4.13
+Key Dependencies:
+@astrojs/react 3.6.2
+@tanstack/react-query 5.66.11
+framer-motion 12.18.1
+next-themes 0.4.6
+react-router-dom 7.4.0
+2. openfav-vibe-V2
+Core:
+React 19
+Astro (latest)
+TypeScript 5
+Tailwind CSS 3.4.17
+Key Differences:
+Next.js 15.2.4 (not present in others)
+Newer React 19
+Lighter dependency set
+Uses "latest" for many packages
+3. openfav-codebase-test-debug
+Core:
+React 18.3.1
+Astro 5.5.2
+TypeScript (implicit)
+Tailwind CSS 3.4.13
+Key Notes:
+Nearly identical to openfav-V6
+Same versions for most packages
+Same dependency structure
+4. openfav-test
+Core: Empty project
+Notes: Just a basic package.json with no dependencies
+Key Observations:
+React Version Split:
+V6 and test-debug use React 18.3.1
+Vibe-V2 uses React 19
+Notable Dependencies in V6/test-debug:
+@supabase/supabase-js
+@upstash/redis
+next-themes
+react-router-dom
+framer-motion 12.x (vs 11.x in Vibe-V2)
+Testing:
+V6 and test-debug use Vitest 3.0.9
+Vibe-V2 uses Vitest 2.1.8
+Build & Tooling:
+Vibe-V2 has a simpler, more modern setup
+V6 and test-debug have more detailed type definitions
+Would you like me to dive deeper into any specific aspect of these differences?
+
+Feedback submitted
