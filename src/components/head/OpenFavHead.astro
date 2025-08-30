@@ -1,0 +1,72 @@
+---
+import { SITE, METADATA, UI, ANALYTICS } from '../../config';
+
+// Add type declarations for Google Analytics
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
+---
+
+{/* Helper to get title string */}
+{(() => {
+  const title = typeof METADATA.title === 'object' ? METADATA.title.default : METADATA.title;
+  const description = METADATA.description;
+  const image = METADATA.image ? new URL(METADATA.image, SITE.site).toString() : undefined;
+  const twitterCard = (METADATA as any).twitterCard;
+  
+  return (
+    <>
+      {/* Open Graph / Facebook */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={SITE.site} />
+      <meta property="og:title" content={title} />
+      {description && <meta property="og:description" content={description} />}
+      {image && <meta property="og:image" content={image} />}
+
+      {/* Twitter */}
+      {twitterCard && <meta property="twitter:card" content={twitterCard} />}
+      <meta property="twitter:url" content={SITE.site} />
+      <meta property="twitter:title" content={title} />
+      {description && <meta property="twitter:description" content={description} />}
+      {image && <meta property="twitter:image" content={image} />}
+    </>
+  );
+})()}
+
+<!-- Theme Color -->
+<meta name="theme-color" content={UI.themeColor} />
+<meta name="msapplication-TileColor" content={UI.themeColor} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Google Analytics -->
+{ANALYTICS?.enable && ANALYTICS.vendors?.googleAnalytics?.id && (() => {
+  const gaId = ANALYTICS.vendors.googleAnalytics.id;
+  return (
+    <>
+      <script>
+        // Initialize dataLayer if it doesn't exist
+        window.dataLayer = window.dataLayer || [];
+        
+        // Define gtag function
+        window.gtag = function() {
+          window.dataLayer.push(arguments);
+        };
+        
+        // Initialize gtag with the Google Analytics ID
+        window.gtag('js', new Date());
+        window.gtag('config', `${gaId}`);
+      </script>
+      
+      {/* Load Google Analytics script */}
+      <script 
+        async 
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+      ></script>
+    </>
+  );
+})()

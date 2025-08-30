@@ -1,16 +1,51 @@
 ---
+import Head from '@/components/head/OpenFavHead.astro'
+import Layout from '@/layouts/Layout.astro';
 
+// Import the config to test if it's working
+import { SITE, I18N, METADATA, UI, ANALYTICS } from 'openfav:config';
+
+// Log the config to console for debugging
+console.log({ SITE, I18N, METADATA, UI, ANALYTICS });
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <Head />
+  
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-6">Welcome to OpenFav Test Site</h1>
+    
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">About This Page</h2>
+      <p class="mb-4">
+        This is a test page to verify OpenFav integration with Astro. The page includes SEO meta tags,
+        OpenGraph tags, and other metadata configured through the OpenFav integration.
+      </p>
+      <p>
+        Check the page source to see the generated meta tags in the &lt;head&gt; section.
+      </p>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-gray-100 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-3">Features</h3>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>SEO Optimization</li>
+          <li>OpenGraph Support</li>
+          <li>Twitter Card Support</li>
+          <li>i18n Ready</li>
+          <li>Analytics Integration</li>
+        </ul>
+      </div>
+      
+      <div class="bg-blue-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-3">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="/about" class="text-blue-600 hover:underline">About Us</a></li>
+          <li><a href="/blog" class="text-blue-600 hover:underline">Blog</a></li>
+          <li><a href="/contact" class="text-blue-600 hover:underline">Contact</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</Layout>

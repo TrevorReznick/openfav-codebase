@@ -1,5 +1,33 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "moduleResolution": "node16",
+    "module": "Node16",
+    "target": "es2022",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "paths": {
+      "~/*": ["src/*"],
+      "@/*": ["src/*"],
+      "openfav-integration": ["./vendor/integrations/index.ts"],
+      "openfav:config": ["src/config.ts"]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["node", "vite/client"]
+  },
+  "include": [
+    "src/**/*",
+    "vendor/integrations/**/*.ts",
+    "vendor/integrations/**/*.js",
+    "vite.config.*",
+    "astro.config.*"
+  ],
+  "exclude": [
+    "dist/",
+    "node_modules/"
+  ]
 }

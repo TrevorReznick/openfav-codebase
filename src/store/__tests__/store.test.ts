@@ -9,7 +9,7 @@ import {
   loadingStore, 
   themeStore, 
   useLoading 
-} from '../index';
+} from '../index.js';
 
 describe('Store', () => {
   // Reset stores before each test
