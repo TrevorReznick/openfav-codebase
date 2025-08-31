@@ -34,7 +34,7 @@ const configPlugin = {
   config() {
     return {
       define: {
-        'import.meta.env.OPENFAV_CONFIG': JSON.stringify(openfavConfig)
+        'import.meta.env.OPENFAV_CONFIG': JSON.stringify(JSON.stringify(openfavConfig))
       }
     };
   }
