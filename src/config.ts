@@ -1,22 +1,11 @@
+// @ts-ignore - This is injected by Vite at build time
+const rawConfig = typeof import.meta.env.OPENFAV_CONFIG !== 'undefined' 
+  ? JSON.parse(import.meta.env.OPENFAV_CONFIG) 
+  : {};
+
 import configBuilder from '../vendor/integrations/files/configBuilder.js';
-import loadConfig from '../vendor/integrations/files/loadConfig.js';
-import { fileURLToPath } from 'url';
-import path from 'path';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Load the config file
-const loadOpenFavConfig = (configPath: string) => {
-  try {
-    return loadConfig(configPath);
-  } catch (error) {
-    console.error('Error loading config file:', error);
-    return {};
-  }
-};
-
-// Load the OpenFav config
-const rawConfig = loadOpenFavConfig(path.resolve(__dirname, './config.yaml'));
+// Build the config using the injected values
 const { SITE, I18N, METADATA, UI, ANALYTICS } = configBuilder(rawConfig);
 
 export { SITE, I18N, METADATA, UI, ANALYTICS };

@@ -22,10 +22,23 @@ const loadConfig = (configPath) => {
 };
 
 // Load the OpenFav config
-const openfavConfig = loadConfig(path.resolve(__dirname, './src/config.yaml'));
+const configPath = path.resolve(__dirname, './src/config.yaml');
+const openfavConfig = loadConfig(configPath);
 
 // Import the plugin
 import openfavConfigPlugin from './vite-plugin-openfav-config.js';
+
+// Create a Vite plugin to make the config available at runtime
+const configPlugin = {
+  name: 'config-plugin',
+  config() {
+    return {
+      define: {
+        'import.meta.env.OPENFAV_CONFIG': JSON.stringify(openfavConfig)
+      }
+    };
+  }
+};
 
 // Export the config
 export default defineConfig({
@@ -37,9 +50,11 @@ export default defineConfig({
       }
     },
     plugins: [
-      // Use the plugin synchronously
+      // Use both plugins
+      configPlugin,
       openfavConfigPlugin(openfavConfig)
-    ]
+    ],
+    assetsInclude: ['**/*.yaml', '**/*.yml']
   },
   integrations: []
 });
