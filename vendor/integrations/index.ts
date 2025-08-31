@@ -7,7 +7,7 @@ import configBuilder from './files/configBuilder.js'
 import type { Config as OpenfavUserConfig } from './files/configBuilder.js'
 import loadConfig from './files/loadConfig.js'
 
-export default ({ config: _themeConfig = 'src/openfav-config.yaml' } = {}): OpenfavIntegration => {
+export default ({ config: _themeConfig = 'src/config.yaml' } = {}): OpenfavIntegration => {
   let cfg: OpenfavConfig
   return {
     name: 'openfav-integration',

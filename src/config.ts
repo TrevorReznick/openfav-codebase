@@ -16,7 +16,7 @@ const loadOpenFavConfig = (configPath: string) => {
 };
 
 // Load the OpenFav config
-const rawConfig = loadOpenFavConfig(path.resolve(__dirname, './openfav-config.yaml'));
+const rawConfig = loadOpenFavConfig(path.resolve(__dirname, './config.yaml'));
 const { SITE, I18N, METADATA, UI, ANALYTICS } = configBuilder(rawConfig);
 
 export { SITE, I18N, METADATA, UI, ANALYTICS };

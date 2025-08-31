@@ -22,7 +22,7 @@ const loadConfig = (configPath) => {
 };
 
 // Load the OpenFav config
-const openfavConfig = loadConfig(path.resolve(__dirname, './src/openfav-config.yaml'));
+const openfavConfig = loadConfig(path.resolve(__dirname, './src/config.yaml'));
 
 // Import the plugin
 import openfavConfigPlugin from './vite-plugin-openfav-config.js';
