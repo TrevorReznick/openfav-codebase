@@ -42,6 +42,7 @@ const configPlugin = {
 
 // Export the config
 export default defineConfig({
+  output: 'server',
   adapter: vercel(),
   vite: {
     resolve: {
