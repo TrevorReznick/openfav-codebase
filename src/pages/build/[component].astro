@@ -1,3 +1,19 @@
 ---
-import Layout from '@/layouts/Layout.astro'
+// src/pages/[...component].astro
+import ThemeLayout from '@/layouts/Layout.astro'
+import DynamicWrapper from '@/react/wrappers/dynamicWrapper.tsx';
+
+const componentPath = Astro.params.component?.toString() || 'home/HomePage';
+const layoutType = componentPath.startsWith('admin/') ? 'dashboard' : 'default';
 ---
+
+<ThemeLayout layout={layoutType}>
+  <DynamicWrapper 
+    client:load 
+    componentPath={componentPath}
+    props={{
+      astroUrl: Astro.url,
+      astroParams: Astro.params
+    }}
+  />
+</ThemeLayout>
