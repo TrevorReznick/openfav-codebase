@@ -7,7 +7,8 @@ import path from 'path';
 const COMPONENT_BASES = {
   pages: path.join(process.cwd(), 'src', 'components', 'pages'),
   home: path.join(process.cwd(), 'src', 'react', 'components', 'home'),
-  common: path.join(process.cwd(), 'src', 'react', 'components', 'common')
+  common: path.join(process.cwd(), 'src', 'react', 'components', 'common'),
+  examples: path.join(process.cwd(), 'src', 'react', 'components', 'examples')
 };
 
 interface AutoComponentConfig {

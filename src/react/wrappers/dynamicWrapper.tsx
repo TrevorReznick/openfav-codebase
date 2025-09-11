@@ -1,9 +1,10 @@
 // src/react/DynamicWrapper.tsx
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { getDynamicComponent } from '@/react/lib/autoComponentLoader';
-import LoadFallback from '@/reactcomponents/LoadFallback'
-import { useAuthActions } from './hooks/useAuthActions';
+import { getDynamicComponent } from '@/react/lib/autoComponentLoader.tsx'
+import LoadFallback from '../components/LoadFallback.js'
+// Auth will be implemented later
+// import { useAuthActions } from './hooks/useAuthActions';
 
 interface DynamicWrapperProps {
   componentPath: string;
@@ -18,18 +19,20 @@ export default function DynamicWrapper({
 }: DynamicWrapperProps) {
   const [Component, setComponent] = useState<React.ComponentType | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const { isAuthenticated } = useAuthActions();
+  // Auth will be implemented later
+  // const { isAuthenticated } = useAuthActions();
   
   useEffect(() => {
     const loadComponent = async () => {
       try {
         const config = await getDynamicComponent(componentPath);
         
-        if (config.requiredAuth && !isAuthenticated) {
-          const AuthComponent = lazy(() => import('./components/auth/Auth'));
-          setComponent(() => AuthComponent);
-          return;
-        }
+        // Auth will be implemented later
+        // if (config.requiredAuth && !isAuthenticated) {
+        //   const AuthComponent = lazy(() => import('./components/auth/Auth'));
+        //   setComponent(() => AuthComponent);
+        //   return;
+        // }
         
         const LazyComponent = lazy(config.loader);
         setComponent(() => LazyComponent);
@@ -39,7 +42,7 @@ export default function DynamicWrapper({
     };
     
     loadComponent();
-  }, [componentPath, isAuthenticated]);
+  }, [componentPath]); // Removed isAuthenticated from dependencies
   
   if (error) {
     return (
