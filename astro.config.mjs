@@ -47,11 +47,12 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src')
+        '@': path.resolve(__dirname, './src'),
+        '~': path.resolve(__dirname, './src')
       }
     },
     plugins: [
-      // Use both plugins
+      // Use the config plugin
       configPlugin,
       openfavConfigPlugin(openfavConfig)
     ],
