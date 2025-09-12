@@ -2,9 +2,9 @@ import React, { lazy, Suspense, useState, useEffect, useMemo } from 'react'
 import type { FC, ComponentType, ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
-import { getComponentConfig, hasComponent } from '@/react/lib/autoComponentLoader'
+import { getDynamicComponent } from '@/react/lib/autoComponentLoader'
 import { ThemeProvider } from '@/react/providers/themeProvider'
-import { ThemeToggle } from '@/react/components/ThemeToggle'
+import { ThemeToggle } from '~/react/components/common/ThemeToggle'
 import { NavigationProvider } from '@/react/hooks/useNavigation'
 import LoadingFallback from '@/react/components/common/LoadingFallback'
 
@@ -39,10 +39,11 @@ const AppClient: FC<AppClientProps> = ({
   const providers: Array<ComponentType<{ children: ReactNode }>> = [
     ({ children }: { children: ReactNode }) => (
       <QueryClientProvider client={queryClient}>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </QueryClientProvider>
     ),
-    ThemeProvider as ComponentType<{ children: ReactNode }>,
     NavigationProvider as ComponentType<{ children: ReactNode }>,
     ...additionalProviders,
   ]
@@ -57,45 +58,39 @@ const AppClient: FC<AppClientProps> = ({
   // Load component when componentName changes
   useEffect(() => {
     if (!componentName) {
-      setComponentState({ name: null, error: null, isLoading: false })
-      return
+      setComponentState({ name: null, error: null, isLoading: false });
+      return;
     }
 
-    let isMounted = true
+    let isMounted = true;
     
     const loadComponent = async () => {
       try {
-        setComponentState(prev => ({ ...prev, isLoading: true, error: null }))
+        setComponentState(prev => ({ ...prev, isLoading: true, error: null }));
         
-        // Check if component exists
-        const componentExists = await hasComponent(componentName)
-        if (!componentExists) {
-          throw new Error(`Component "${componentName}" not found in registry`)
-        }
-
-        // Get component config
-        await getComponentConfig(componentName)
+        // Get component config using getDynamicComponent
+        await getDynamicComponent(componentName);
         
         if (isMounted) {
           setComponentState({
             name: componentName,
             error: null,
             isLoading: false,
-          })
+          });
         }
       } catch (error) {
-        console.error(`Failed to load component ${componentName}:`, error)
+        console.error(`Failed to load component ${componentName}:`, error);
         if (isMounted) {
           setComponentState({
             name: componentName,
             error: error as Error,
             isLoading: false,
-          })
+          });
         }
       }
-    }
+    };
 
-    loadComponent()
+    loadComponent();
     
     return () => {
       isMounted = false
@@ -105,20 +100,20 @@ const AppClient: FC<AppClientProps> = ({
   // Create the dynamic component with React.lazy
   const DynamicComponent = useMemo(() => {
     if (!componentState.name || componentState.isLoading || componentState.error) {
-      return null
+      return null;
     }
     
     return lazy(async () => {
       try {
-        const config = await getComponentConfig(componentState.name!)
-        const Component = await config.loader()
-        return { default: Component.default }
+        const config = await getDynamicComponent(componentState.name!);
+        const Component = await config.loader();
+        return { default: Component.default };
       } catch (error) {
-        console.error('Error in lazy loading:', error)
-        throw error
+        console.error('Error in lazy loading:', error);
+        throw error;
       }
-    })
-  }, [componentState.name, componentState.isLoading, componentState.error])
+    });
+  }, [componentState.name, componentState.isLoading, componentState.error]);
 
   // Render fallback UI based on the current state
   const renderFallback = () => {

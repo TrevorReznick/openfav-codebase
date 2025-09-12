@@ -4,11 +4,14 @@ import type { ComponentType } from 'react'
 
 // Base paths relative to the project root - examples first
 const COMPONENT_BASES = {
-  examples: '/src/react/components/examples',  // Check examples directory first
-  pages: '/src/components/pages',
-  home: '/src/react/components/home',
+  // Direct component paths
+  auth: '/src/react/components/auth',
+  dashboard: '/src/react/components/dashboard',
+  examples: '/src/react/components/examples',
   common: '/src/react/components/common',
-  components: '/src/react/components'  // Check root components last
+  // ui: '/src/react/components/ui',
+  // Fallback to root components last
+  components: '/src/react/components'
 } as const;
 
 type ComponentBases = keyof typeof COMPONENT_BASES;
@@ -29,7 +32,14 @@ const joinPaths = (...parts: string[]): string => {
 
 export async function getDynamicComponent(componentPath: string): Promise<AutoComponentConfig> {
   // Normalize path (e.g., "home.FeatureCard" -> "home/FeatureCard")
-  const normalizedPath = componentPath.replace(/\./g, '/');
+  // Also handle paths that start with 'components/' prefix
+  let normalizedPath = componentPath.replace(/\./g, '/');
+  normalizedPath = normalizedPath.replace(/^components\//, '');
+  
+  // Explicitly exclude UI components
+  if (normalizedPath.startsWith('ui/') || normalizedPath.includes('/ui/')) {
+    throw new Error(`UI components are not available through dynamic loading: ${componentPath}`);
+  }
   
   // Special handling for TestComponent - only check in examples directory
   if (normalizedPath.endsWith('TestComponent')) {
@@ -74,19 +84,54 @@ export async function getDynamicComponent(componentPath: string): Promise<AutoCo
     }
   }
   
-  // Try to find the component in different directories
+  // Try exact match first (e.g., auth/Auth)
+  try {
+    const exactPath = `/src/react/components/${normalizedPath}.tsx`;
+    const module = await import(/* @vite-ignore */ exactPath);
+    return {
+      loader: () => import(/* @vite-ignore */ exactPath),
+      layout: 'minimal',
+      requiredAuth: normalizedPath.startsWith('auth/')
+    };
+  } catch (e) {
+    // Try with index.tsx
+    try {
+      const indexPath = `/src/react/components/${normalizedPath}/index.tsx`;
+      const module = await import(/* @vite-ignore */ indexPath);
+      return {
+        loader: () => import(/* @vite-ignore */ indexPath),
+        layout: 'minimal',
+        requiredAuth: normalizedPath.startsWith('auth/')
+      };
+    } catch (e) {
+      console.debug(`[autoComponentLoader] Component not found at ${normalizedPath}:`, e);
+    }
+  }
+  
+  // Fallback to searching in base directories
   for (const [baseName, basePath] of Object.entries(COMPONENT_BASES)) {
     try {
-      const fullPath = `${basePath}/${normalizedPath}.tsx`;
+      // Try direct path first (e.g., auth/Auth)
+      let fullPath = `${basePath}/${normalizedPath}.tsx`;
       
       // Try importing the component
-      const module = await import(/* @vite-ignore */ fullPath);
-      
-      return {
-        loader: () => import(/* @vite-ignore */ fullPath),
-        layout: baseName === 'pages' ? 'default' : 'minimal',
-        requiredAuth: normalizedPath.startsWith('admin/')
-      };
+      try {
+        const module = await import(/* @vite-ignore */ fullPath);
+        return {
+          loader: () => import(/* @vite-ignore */ fullPath),
+          layout: 'minimal',
+          requiredAuth: baseName === 'auth' || normalizedPath.startsWith('auth/')
+        };
+      } catch (e) {
+        // If direct path fails, try with index.tsx for directories
+        fullPath = `${basePath}/${normalizedPath}/index.tsx`;
+        const module = await import(/* @vite-ignore */ fullPath);
+        return {
+          loader: () => import(/* @vite-ignore */ fullPath),
+          layout: 'minimal',
+          requiredAuth: baseName === 'auth' || normalizedPath.startsWith('auth/')
+        };
+      }
     } catch (e) {
       // Continue to try other directories
       console.debug(`[autoComponentLoader] Component not found at ${baseName}:`, e);

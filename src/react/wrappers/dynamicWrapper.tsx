@@ -2,7 +2,7 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { getDynamicComponent } from '@/react/lib/autoComponentLoader.ts'
-import LoadFallback from '../components/LoadFallback.js'
+import LoadFallback from '@/react/components/common/LoadFallback'
 // Auth will be implemented later
 // import { useAuthActions } from './hooks/useAuthActions';
 
