@@ -5,6 +5,7 @@ import path from 'path'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import vercel from '@astrojs/vercel'
+import react from '@astrojs/react';
 
 // Get directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -58,5 +59,10 @@ export default defineConfig({
     ],
     assetsInclude: ['**/*.yaml', '**/*.yml']
   },
-  integrations: []
+  integrations: [
+    react({
+      include: ['**/react/**/*.{jsx,tsx}'],
+      experimentalReactChildren: true
+    })
+  ]
 });
