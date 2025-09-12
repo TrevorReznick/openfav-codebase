@@ -1,0 +1,65 @@
+---
+// src/pages/[...component].astro
+import ThemeLayout from '@/layouts/Layout.astro';
+import DynamicWrapper from '@/react/wrappers/dynamicWrapper.tsx';
+
+// Type definitions
+interface ComponentParams {
+  component?: string;
+  [key: string]: string | undefined;
+}
+
+// Convert kebab-case to PascalCase for component names
+const toPascalCase = (str: string): string => {
+  const result = str
+    .split('/')
+    .map(part => 
+      part
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join('')
+    )
+    .join('/');
+  
+  console.log(`[build/[component].astro] Converted "${str}" to "${result}"`);
+  return result;
+};
+
+// Get component path and normalize it
+const params = Astro.params as ComponentParams;
+const originalPath = params.component?.toString() || 'home/HomePage';
+
+// Handle test-component specifically - always use examples/TestComponent
+let componentPath = originalPath === 'test-component' 
+  ? 'examples/TestComponent' 
+  : originalPath;
+
+const layoutType = componentPath.startsWith('admin/') ? 'dashboard' : 'default';
+
+// Debug: Log component resolution
+console.log('[build/[component].astro] Component resolution:', { 
+  originalPath,
+  componentPath,
+  layoutType,
+  expectedPath: `/src/react/components/${componentPath}.tsx`
+});
+---
+
+<ThemeLayout layout={layoutType}>
+  <script>
+    // Client-side debug logs
+    console.log('[build/[component].astro] Client-side execution started');
+    console.log('[build/[component].astro] Component path:', `{componentPath}`);
+  </script>
+  
+  <DynamicWrapper 
+    client:load 
+    componentPath={componentPath}
+    props={{
+      astroUrl: Astro.url,
+      astroParams: params,
+      originalPath,
+      debug: true
+    }}
+  />
+</ThemeLayout>
