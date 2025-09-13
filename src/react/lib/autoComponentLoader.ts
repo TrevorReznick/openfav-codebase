@@ -30,7 +30,7 @@ const joinPaths = (...parts: string[]): string => {
     .join('/');
 };
 
-export async function getDynamicComponent(componentPath: string): Promise<AutoComponentConfig> {
+export async function getDynamicComponent(componentPath: string, debug = false): Promise<AutoComponentConfig> {
   // Normalize path (e.g., "home.FeatureCard" -> "home/FeatureCard")
   // Also handle paths that start with 'components/' prefix
   let normalizedPath = componentPath.replace(/\./g, '/');
@@ -51,95 +51,40 @@ export async function getDynamicComponent(componentPath: string): Promise<AutoCo
         layout: 'minimal',
         requiredAuth: false
       };
-    } catch (e) {
-      console.error('[autoComponentLoader] Failed to load TestComponent:', e);
-      throw new Error(`Failed to load TestComponent: ${e.message}`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('[autoComponentLoader] Failed to load TestComponent:', error);
+      throw new Error(`Failed to load TestComponent: ${errorMessage}`);
     }
   }
   
-  // Special handling for examples directory
-  if (normalizedPath.startsWith('examples/') || normalizedPath.includes('test-component')) {
-    let componentName = normalizedPath;
-    if (normalizedPath.includes('test-component')) {
-      componentName = 'TestComponent';
-    } else {
-      componentName = normalizedPath.replace('examples/', '');
-    }
-    
-    const possiblePaths = [
-      `/src/react/components/examples/${componentName}.tsx`,
-      `/src/react/components/examples/${componentName}/index.tsx`
-    ];
-    
-    for (const fullPath of possiblePaths) {
-      try {
-        const module = await import(/* @vite-ignore */ fullPath);
-        return {
-          loader: () => import(/* @vite-ignore */ fullPath),
-          layout: 'minimal',
-          requiredAuth: false
-        };
-      } catch (e) {
-        console.debug(`[autoComponentLoader] Component not found at ${fullPath}:`, e);
-      }
-    }
-  }
-  
-  // Try exact match first (e.g., auth/Auth)
-  try {
-    const exactPath = `/src/react/components/${normalizedPath}.tsx`;
-    const module = await import(/* @vite-ignore */ exactPath);
-    return {
-      loader: () => import(/* @vite-ignore */ exactPath),
-      layout: 'minimal',
-      requiredAuth: normalizedPath.startsWith('auth/')
-    };
-  } catch (e) {
-    // Try with index.tsx
+  // Try to find the component in the components directory
+  const componentBases: [string, string][] = [
+    ['examples', '@/react/components/examples'],
+    ['auth', '@/react/components/auth'],
+    ['common', '@/react/components/common'],
+    ['', '@/react/components']  // Root components
+  ];
+
+  for (const [base, importPath] of componentBases) {
     try {
-      const indexPath = `/src/react/components/${normalizedPath}/index.tsx`;
-      const module = await import(/* @vite-ignore */ indexPath);
+      const fullPath = base ? `${importPath}/${normalizedPath}` : `${importPath}/${normalizedPath}`;
+      const module = await import(/* @vite-ignore */ fullPath);
+      
       return {
-        loader: () => import(/* @vite-ignore */ indexPath),
-        layout: 'minimal',
+        loader: () => import(/* @vite-ignore */ fullPath),
+        layout: 'default',
         requiredAuth: normalizedPath.startsWith('auth/')
       };
-    } catch (e) {
-      console.debug(`[autoComponentLoader] Component not found at ${normalizedPath}:`, e);
-    }
-  }
-  
-  // Fallback to searching in base directories
-  for (const [baseName, basePath] of Object.entries(COMPONENT_BASES)) {
-    try {
-      // Try direct path first (e.g., auth/Auth)
-      let fullPath = `${basePath}/${normalizedPath}.tsx`;
-      
-      // Try importing the component
-      try {
-        const module = await import(/* @vite-ignore */ fullPath);
-        return {
-          loader: () => import(/* @vite-ignore */ fullPath),
-          layout: 'minimal',
-          requiredAuth: baseName === 'auth' || normalizedPath.startsWith('auth/')
-        };
-      } catch (e) {
-        // If direct path fails, try with index.tsx for directories
-        fullPath = `${basePath}/${normalizedPath}/index.tsx`;
-        const module = await import(/* @vite-ignore */ fullPath);
-        return {
-          loader: () => import(/* @vite-ignore */ fullPath),
-          layout: 'minimal',
-          requiredAuth: baseName === 'auth' || normalizedPath.startsWith('auth/')
-        };
+    } catch (error) {
+      // Continue to next base path
+      if (debug) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.log(`[autoComponentLoader] Component not found at ${base}:`, errorMessage);
       }
-    } catch (e) {
-      // Continue to try other directories
-      console.debug(`[autoComponentLoader] Component not found at ${baseName}:`, e);
-      continue;
     }
   }
-  
-  throw new Error(`Component ${componentPath} not found in any base directory. ` +
-    `Tried: ${Object.keys(COMPONENT_BASES).map(b => `${b}/${normalizedPath}`).join(', ')}`);
+
+  // If we get here, the component wasn't found in any base path
+  throw new Error(`Component not found: ${componentPath}`);
 }
