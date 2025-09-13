@@ -1,10 +1,8 @@
-// src/react/DynamicWrapper.tsx
+// src/react/wrappers/dynamicWrapper.tsx
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { getDynamicComponent } from '@/react/lib/autoComponentLoader.ts'
-import LoadFallback from '@/react/components/common/LoadFallback'
-// Auth will be implemented later
-// import { useAuthActions } from './hooks/useAuthActions';
+import { getDynamicComponent } from '@/react/lib/autoComponentLoader';
+import LoadFallback from '@/react/components/common/LoadFallback';
 
 interface DynamicWrapperProps {
   componentPath: string;
@@ -19,23 +17,22 @@ const DebugInfo: React.FC<{ label: string; value: any }> = ({ label, value }) =>
   </div>
 );
 
-export default function DynamicWrapper({ 
-  componentPath, 
-  props = {}, 
+const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
+  componentPath,
+  props = {},
   fallback: CustomFallback = LoadFallback,
   debug = false
-}: DynamicWrapperProps) {
+}) => {
   const [Component, setComponent] = useState<React.ComponentType | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const [loadingState, setLoadingState] = useState<string>('idle');
-  
-  if (debug) {
-    console.log('[DynamicWrapper] Initializing with:', { componentPath, props });
-  }
+  const [loadingState, setLoadingState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     let isMounted = true;
+
     const loadComponent = async () => {
+      if (!isMounted) return;
+      
       try {
         setLoadingState('loading');
         if (debug) console.log('[DynamicWrapper] Loading component:', componentPath);
@@ -43,13 +40,9 @@ export default function DynamicWrapper({
         const config = await getDynamicComponent(componentPath);
         if (debug) console.log('[DynamicWrapper] Got component config:', { config });
         
-        // Auth will be implemented later
-        // if (config.requiredAuth && !isAuthenticated) {
-        //   const AuthComponent = lazy(() => import('./components/auth/Auth'));
-        //   setComponent(() => AuthComponent);
-        //   return;
-        // }
+        if (!isMounted) return;
         
+        // Create a lazy-loaded component with the config's loader
         const LazyComponent = lazy(async () => {
           try {
             if (debug) console.log('[DynamicWrapper] Lazy loading component:', componentPath);
@@ -67,9 +60,9 @@ export default function DynamicWrapper({
           setLoadingState('success');
         }
       } catch (err) {
-        console.error(`[DynamicWrapper] Error loading ${componentPath}:`, err);
+        console.error(`[DynamicWrapper] Error loading component '${componentPath}':`, err);
         if (isMounted) {
-          setError(err as Error);
+          setError(err instanceof Error ? err : new Error(String(err)));
           setLoadingState('error');
         }
       }
@@ -81,71 +74,48 @@ export default function DynamicWrapper({
       isMounted = false;
     };
   }, [componentPath, debug]);
-  
-  if (error) {
-    console.error('[DynamicWrapper] Render error state:', error);
+
+  // Render error state
+  if (loadingState === 'error' || error) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded">
-        <h3 className="font-bold text-red-800 mb-2">Error loading component</h3>
-        <div className="font-mono text-sm mb-2">{componentPath}</div>
-        <div className="text-red-600 text-sm">{error.message}</div>
-        {debug && (
-          <details className="mt-2">
-            <summary className="text-xs cursor-pointer">Debug Details</summary>
-            <pre className="text-xs bg-gray-100 p-2 mt-1 rounded overflow-auto max-h-40">
-              {JSON.stringify({
-                componentPath,
-                error: error.toString(),
-                stack: error.stack,
-                loadingState
-              }, null, 2)}
-            </pre>
-          </details>
+      <div className="p-4 border border-red-300 bg-red-50 rounded">
+        <h3 className="text-red-700 font-medium">Error loading component: {componentPath}</h3>
+        {error?.message && <p className="text-red-600 mt-2">{error.message}</p>}
+        {debug && error?.stack && (
+          <pre className="text-xs text-red-500 mt-2 overflow-auto">
+            {error.stack}
+          </pre>
         )}
       </div>
     );
   }
-  
-  if (!Component) {
-    if (debug) console.log('[DynamicWrapper] No component loaded, showing fallback');
+
+  // Render loading state
+  if (loadingState === 'loading' || !Component) {
     return <CustomFallback />;
   }
-  
-  if (debug) console.log('[DynamicWrapper] Rendering component:', componentPath);
-  
+
+  // Render the loaded component
   return (
-    <ErrorBoundary 
-      fallback={
-        <div className="p-4 bg-red-50 border border-red-200 rounded">
-          <h3 className="font-bold text-red-800">Error in component</h3>
-          <div className="font-mono text-sm">{componentPath}</div>
+    <ErrorBoundary
+      fallbackRender={({ error: boundaryError }) => (
+        <div className="p-4 border border-red-300 bg-red-50 rounded">
+          <h3 className="text-red-700 font-medium">Component Error: {componentPath}</h3>
+          <p className="text-red-600 mt-2">{boundaryError.message}</p>
           {debug && (
-            <div className="mt-2 text-xs">
-              <div>Props: {JSON.stringify(props, null, 2)}</div>
-              <div>Loading State: {loadingState}</div>
-            </div>
+            <pre className="text-xs text-red-500 mt-2 overflow-auto">
+              {boundaryError.stack}
+            </pre>
           )}
         </div>
-      }
+      )}
     >
-      <Suspense 
-        fallback={
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded">
-            <div className="text-blue-800">Loading {componentPath}...</div>
-            {debug && <DebugInfo label="Loading State" value={loadingState} />}
-          </div>
-        }
-      >
-        {debug && (
-          <div className="mb-4 p-2 bg-green-50 border border-green-200 rounded text-xs">
-            <div className="font-bold">Debug Info:</div>
-            <DebugInfo label="Component Path" value={componentPath} />
-            <DebugInfo label="Loading State" value={loadingState} />
-            <DebugInfo label="Props" value={props} />
-          </div>
-        )}
+      <Suspense fallback={<CustomFallback />}>
+        {debug && <DebugInfo label="Component Props" value={props} />}
         <Component {...props} />
       </Suspense>
     </ErrorBoundary>
   );
-}
+};
+
+export default DynamicWrapper;

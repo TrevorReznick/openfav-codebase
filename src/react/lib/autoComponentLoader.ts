@@ -42,17 +42,18 @@ export async function getDynamicComponent(componentPath: string): Promise<AutoCo
   }
   
   // Special handling for TestComponent - only check in examples directory
-  if (normalizedPath.endsWith('TestComponent')) {
-    const fullPath = '/src/react/components/examples/TestComponent.tsx';
+  if (normalizedPath.endsWith('TestComponent') || normalizedPath.includes('test-component')) {
     try {
-      const module = await import(/* @vite-ignore */ fullPath);
+      // Try relative import first (works in both dev and prod)
+      const module = await import('@/react/components/examples/TestComponent');
       return {
-        loader: () => import(/* @vite-ignore */ fullPath),
+        loader: () => import('@/react/components/examples/TestComponent'),
         layout: 'minimal',
         requiredAuth: false
       };
     } catch (e) {
-      console.debug(`[autoComponentLoader] TestComponent not found at ${fullPath}:`, e);
+      console.error('[autoComponentLoader] Failed to load TestComponent:', e);
+      throw new Error(`Failed to load TestComponent: ${e.message}`);
     }
   }
   

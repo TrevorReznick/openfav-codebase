@@ -30,9 +30,10 @@ const params = Astro.params as ComponentParams;
 const originalPath = params.component?.toString() || 'home/HomePage';
 
 // Handle test-component specifically - always use examples/TestComponent
-let componentPath = originalPath === 'test-component' 
-  ? 'examples/TestComponent' 
-  : originalPath;
+let componentPath = originalPath;
+if (originalPath === 'test-component' || originalPath.endsWith('test-component')) {
+  componentPath = 'examples/TestComponent';
+}
 
 const layoutType = componentPath.startsWith('admin/') ? 'dashboard' : 'default';
 
@@ -41,7 +42,8 @@ console.log('[build/[component].astro] Component resolution:', {
   originalPath,
   componentPath,
   layoutType,
-  expectedPath: `/src/react/components/${componentPath}.tsx`
+  expectedPath: `@/react/components/${componentPath}`,
+  url: Astro.url.toString()
 });
 ---
 
