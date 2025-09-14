@@ -1,14 +1,14 @@
 // src/react/wrappers/dynamicWrapper.tsx
-import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { getDynamicComponent } from '@/react/lib/autoComponentLoader';
-import LoadFallback from '@/react/components/common/LoadFallback';
+import React, { Suspense, lazy, useEffect, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
+import { getDynamicComponent } from '@/react/lib/autoComponentLoader'
+import LoadFallback from '@/react/components/common/LoadFallback'
 
 interface DynamicWrapperProps {
-  componentPath: string;
-  props?: Record<string, any>;
-  fallback?: React.ComponentType;
-  debug?: boolean;
+  componentPath: string
+  props?: Record<string, any>
+  fallback?: React.ComponentType
+  debug?: boolean
 }
 
 const DebugInfo: React.FC<{ label: string; value: any }> = ({ label, value }) => (
@@ -21,7 +21,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
   componentPath,
   props = {},
   fallback: CustomFallback = LoadFallback,
-  debug = false
+  debug = true
 }) => {
   const [Component, setComponent] = useState<React.ComponentType | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -31,49 +31,49 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
     let isMounted = true;
 
     const loadComponent = async () => {
-      if (!isMounted) return;
+      if (!isMounted) return
       
       try {
-        setLoadingState('loading');
-        if (debug) console.log('[DynamicWrapper] Loading component:', componentPath);
+        setLoadingState('loading')
+        if (debug) console.log('[DynamicWrapper] Loading component:', componentPath)
         
-        const config = await getDynamicComponent(componentPath);
-        if (debug) console.log('[DynamicWrapper] Got component config:', { config });
+        const config = await getDynamicComponent(componentPath)
+        if (debug) console.log('[DynamicWrapper] Got component config:', { config })
         
-        if (!isMounted) return;
+        if (!isMounted) return
         
         // Create a lazy-loaded component with the config's loader
         const LazyComponent = lazy(async () => {
           try {
-            if (debug) console.log('[DynamicWrapper] Lazy loading component:', componentPath);
+            if (debug) console.log('[DynamicWrapper] Lazy loading component:', componentPath)
             const module = await config.loader();
-            if (debug) console.log('[DynamicWrapper] Successfully loaded component:', componentPath);
+            if (debug) console.log('[DynamicWrapper] Successfully loaded component:', componentPath)
             return module;
           } catch (err) {
-            console.error(`[DynamicWrapper] Error in lazy loading ${componentPath}:`, err);
+            console.error(`[DynamicWrapper] Error in lazy loading ${componentPath}:`, err)
             throw err;
           }
         });
         
         if (isMounted) {
-          setComponent(() => LazyComponent);
-          setLoadingState('success');
+          setComponent(() => LazyComponent)
+          setLoadingState('success')
         }
       } catch (err) {
-        console.error(`[DynamicWrapper] Error loading component '${componentPath}':`, err);
+        console.error(`[DynamicWrapper] Error loading component '${componentPath}':`, err)
         if (isMounted) {
-          setError(err instanceof Error ? err : new Error(String(err)));
-          setLoadingState('error');
+          setError(err instanceof Error ? err : new Error(String(err)))
+          setLoadingState('error')
         }
       }
     };
     
-    loadComponent();
+    loadComponent()
     
     return () => {
-      isMounted = false;
+      isMounted = false
     };
-  }, [componentPath, debug]);
+  }, [componentPath, debug])
 
   // Render error state
   if (loadingState === 'error' || error) {
@@ -92,7 +92,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
 
   // Render loading state
   if (loadingState === 'loading' || !Component) {
-    return <CustomFallback />;
+    return <CustomFallback />
   }
 
   // Render the loaded component
@@ -118,4 +118,4 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
   );
 };
 
-export default DynamicWrapper;
+export default DynamicWrapper
