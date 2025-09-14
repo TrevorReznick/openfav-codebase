@@ -1,4 +1,17 @@
-import type { ComponentType } from 'react';
+import { lazy } from 'react'
+import type { ComponentType } from 'react'
+
+const COMPONENT_BASES = {
+  // Direct component paths
+  auth: '/src/react/components/auth',
+  dashboard: '/src/react/components/dashboard',
+  examples: '/src/react/components/examples',
+  common: '/src/react/components/common',
+  // Fallback to root components last
+  components: '/src/react/components'
+} as const
+
+type ComponentBases = keyof typeof COMPONENT_BASES
 
 interface AutoComponentConfig {
   loader: () => Promise<{ default: ComponentType<any> }>;
