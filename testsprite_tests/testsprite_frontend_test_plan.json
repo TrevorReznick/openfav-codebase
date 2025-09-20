@@ -1,0 +1,455 @@
+[
+  {
+    "id": "TC001",
+    "title": "Theme System - Light Mode Selection and Persistence",
+    "description": "Verify that the user can select Light mode in the theme toggle, that the preference is applied immediately with smooth transition, saved locally, and persisted across page reloads.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the application home page with default or previously set theme."
+      },
+      {
+        "type": "action",
+        "description": "Open the theme selection control in the header."
+      },
+      {
+        "type": "action",
+        "description": "Select the Light mode option."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that the UI switches to Light theme with smooth visual transition."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the Light theme setting is saved in local storage or equivalent persistent store."
+      },
+      {
+        "type": "action",
+        "description": "Reload or revisit the application page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the Light mode is reapplied without user interaction."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Theme System - Dark Mode Selection and System Preference Override",
+    "description": "Verify Dark mode can be selected manually, overriding system preferences, with persistence and smooth transition.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Mock system color scheme as Light."
+      },
+      {
+        "type": "action",
+        "description": "Load application with no stored theme preference."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the theme follows system preference (Light)."
+      },
+      {
+        "type": "action",
+        "description": "Select Dark mode from the theme toggle."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that the UI switches to Dark mode with smooth transition."
+      },
+      {
+        "type": "action",
+        "description": "Reload application page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the manually selected Dark mode persists after reload."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Theme System - System Mode Selection with Dynamic System Preference Detection",
+    "description": "Verify that selecting 'System' mode causes the theme to dynamically match system preference and updates on system color scheme changes.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Select 'System' mode from the theme toggle."
+      },
+      {
+        "type": "action",
+        "description": "Set system color scheme to Dark."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the application theme switches to Dark mode."
+      },
+      {
+        "type": "action",
+        "description": "Change system color scheme from Dark to Light."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the application theme updates to Light mode dynamically."
+      },
+      {
+        "type": "action",
+        "description": "Reload page with system mode selected."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the theme on reload matches current system preference."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "User Authentication - Email/Password Login Success",
+    "description": "Verify successful login with valid email and password credentials and session persistence.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid registered email and correct password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user is redirected to dashboard."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm session is active and persists across page reloads."
+      },
+      {
+        "type": "action",
+        "description": "Log out and verify session ends."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "User Authentication - Email/Password Login Failure with Incorrect Credentials",
+    "description": "Verify login fails and appropriate error is shown when incorrect email or password are provided.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter invalid or unregistered email and/or incorrect password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm login is rejected."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify relevant error message is displayed to the user."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "User Authentication - Google Social Login Success",
+    "description": "Ensure user can authenticate successfully using Google social login and session persists.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page."
+      },
+      {
+        "type": "action",
+        "description": "Click on Google social login button."
+      },
+      {
+        "type": "action",
+        "description": "Complete OAuth flow with valid Google account."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify redirection to dashboard upon successful authentication."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm session persistence after page reload."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "User Authentication - Protected Routes Access without Authentication",
+    "description": "Verify that protected routes redirect unauthenticated users to login page.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to navigate directly to a protected route (e.g., dashboard) without logging in."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the user is redirected to the login page."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Responsive Navigation - Client-side Routing with History Management",
+    "description": "Verify navigation links load corresponding components dynamically, update browser history, and support back/forward navigation.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Log in to reach dashboard."
+      },
+      {
+        "type": "action",
+        "description": "Click on various navigation links."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm components are lazy loaded and rendered appropriately."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify browser URL changes accordingly."
+      },
+      {
+        "type": "action",
+        "description": "Use browser back and forward buttons."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm navigation state and UI update match history navigation."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Responsive Navigation - Breadcrumb Support and Responsive Menus",
+    "description": "Ensure breadcrumb trails display correctly matching navigation, and menus adapt responsively on different screen sizes.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate through nested pages or sections."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify breadcrumb accurately shows user’s path."
+      },
+      {
+        "type": "action",
+        "description": "Resize browser window to mobile dimensions."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm menus adapt to a responsive mobile-friendly layout."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "DynamicWrapper Component - Lazy Loading with Suspense and Error Boundary",
+    "description": "Verify that components loaded via DynamicWrapper are lazy loaded properly with fallback UI shown during loading and error boundary catches load failures.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to a page utilizing a dynamic component."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm loading fallback UI is displayed while the component is loading."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the component renders after load completes."
+      },
+      {
+        "type": "action",
+        "description": "Force a failure in lazy loading (e.g. simulate missing component)."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm error boundary displays an error fallback UI gracefully."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Accessibility - Keyboard Navigation and Screen Reader Support",
+    "description": "Verify all interactive components including navigation are accessible via keyboard and work correctly with screen readers.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate through the application using only keyboard tab, enter, and arrow keys."
+      },
+      {
+        "type": "assertion",
+        "description": "Check focus order is logical and visible."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that screen readers announce elements correctly with meaningful labels."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Performance - Verify First Contentful Paint (FCP) under 1.5 seconds",
+    "description": "Measure the time to first contentful paint on initial load and ensure it is under 1.5 seconds.",
+    "category": "performance",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load the application on typical broadband network and modern device."
+      },
+      {
+        "type": "assertion",
+        "description": "Measure and verify that FCP is recorded below 1.5 seconds."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Performance - Verify Time to Interactive (TTI) under 3 seconds",
+    "description": "Assess time taken after load for the app to become fully interactive and confirm it is below 3 seconds.",
+    "category": "performance",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load the application on a modern browser."
+      },
+      {
+        "type": "assertion",
+        "description": "Measure TTI metric and verify it is under 3 seconds."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Performance - Bundle Size Verification Below 150KB gzipped",
+    "description": "Inspect the production bundle size to confirm total gzipped JS size remains below 150KB.",
+    "category": "performance",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Build the application using production build command."
+      },
+      {
+        "type": "assertion",
+        "description": "Analyze output bundle size and confirm it is below 150KB gzipped."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Cross-browser Compatibility - Functional in Chrome, Firefox, Safari, Edge, and Mobile Browsers",
+    "description": "Verify core functionalities such as login, theme switching, navigation, and dynamic loading work consistently across supported browsers and devices.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application in latest versions of Chrome, Firefox, Safari, Edge on desktop."
+      },
+      {
+        "type": "action",
+        "description": "Perform login, theme toggle, navigation, and dynamic component loading."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the UI renders correctly and all features function as expected on each."
+      },
+      {
+        "type": "action",
+        "description": "Repeat test in iOS Safari and Android Chrome browsers on mobile devices."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify all key functionalities work without issues on mobile browsers."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Reusable UI Components - ThemeToggle Interaction and Feedback",
+    "description": "Check that the ThemeToggle component correctly reflects current mode, allows switching modes with immediate visual feedback, and is keyboard accessible.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Focus on ThemeToggle component."
+      },
+      {
+        "type": "action",
+        "description": "Use keyboard or mouse to cycle through theme modes."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm current theme mode updates accordingly and UI changes smoothly."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure component is accessible via keyboard and has appropriate ARIA attributes."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Visual Regression - Verify No Unexpected UI Changes After Code Changes",
+    "description": "Run visual regression tests on key pages and components to detect unintended UI deviations.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Capture baseline screenshots of home, dashboard, login, and theme toggle in various states."
+      },
+      {
+        "type": "action",
+        "description": "After application updates, re-capture screenshots."
+      },
+      {
+        "type": "assertion",
+        "description": "Compare baselines and new screenshots to detect visual regressions."
+      }
+    ]
+  }
+]

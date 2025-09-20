@@ -1,40 +1,56 @@
 {
-  "tech_stack": ["typescript", "react", "astro", "nanostores"],
+  "tech_stack": [
+    "TypeScript",
+    "Astro 5",
+    "React 18",
+    "Tailwind CSS",
+    "Vite 7",
+    "Vitest 3",
+    "Testing Library (React)",
+    "Node.js 21"
+  ],
   "features": [
     {
-      "name": "store",
-      "description": "Centralized state management using nanostores",
-      "files": ["src/store/index.ts"]
+      "name": "Dynamic Component Loader (Vite glob)",
+      "description": "Discovers and lazy-loads React components at runtime using import.meta.glob registry. Supports alias normalization, base directory prefixes, bare-name resolution, and index.* conventions.",
+      "files": [
+        "src/react/lib/autoComponentLoader.ts"
+      ]
     },
     {
-      "name": "counter",
-      "description": "Simple counter state management",
-      "files": ["src/store/index.ts"]
+      "name": "Dynamic Wrapper (Suspense + ErrorBoundary)",
+      "description": "Runtime wrapper that resolves component config via getDynamicComponent, renders lazy-loaded components with Suspense fallback, and handles load errors with react-error-boundary.",
+      "files": [
+        "src/react/wrappers/dynamicWrapper.tsx",
+        "src/react/components/common/LoadFallback.tsx"
+      ]
     },
     {
-      "name": "navigation",
-      "description": "Route management and navigation state",
-      "files": ["src/store/index.ts"]
+      "name": "Astro Dynamic Builder Route",
+      "description": "Astro catch-all page that maps URL segments to component paths (kebab to PascalCase), preserves base directories, and renders the React component through DynamicWrapper inside the main layout.",
+      "files": [
+        "src/pages/build/[...component].astro",
+        "src/layouts/Layout.astro"
+      ]
     },
     {
-      "name": "notifications",
-      "description": "Notification state management",
-      "files": ["src/store/index.ts"]
+      "name": "Sample Components for E2E Assertions",
+      "description": "Representative React components used by tests to verify dynamic loading behavior.",
+      "files": [
+        "src/react/components/home/index.tsx",
+        "src/react/components/dashboard/TestTracker.tsx"
+      ]
     },
     {
-      "name": "authentication",
-      "description": "User authentication state management",
-      "files": ["src/store/index.ts"]
-    },
-    {
-      "name": "theme",
-      "description": "Theme management (dark/light mode)",
-      "files": ["src/store/index.ts"]
-    },
-    {
-      "name": "loading",
-      "description": "Loading state management",
-      "files": ["src/store/index.ts"]
+      "name": "Utilities and Configuration",
+      "description": "Project configs and utilities for TypeScript, Vite, Vitest, Tailwind, and Astro.",
+      "files": [
+        "package.json",
+        "tsconfig.json",
+        "vitest.config.ts",
+        "tailwind.config.mjs",
+        "astro.config.mjs"
+      ]
     }
   ]
 }

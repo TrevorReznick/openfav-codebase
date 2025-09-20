@@ -1,6 +1,15 @@
 {
-  "status": "init",
+  "status": "commited",
   "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:3000"
+  "localEndpoint": "http://localhost:4321",
+  "executionArgs": {
+    "projectName": "openfav-init",
+    "projectPath": "/home/default/develop-env/prod/openfav-test/openfav-init",
+    "testIds": [],
+    "additionalInstruction": "Focus tests on the Astro dynamic builder route `/build/[...component].astro` that renders React components via `DynamicWrapper` and `getDynamicComponent`. Include cases:\n1) Navigate to /build/home and assert the Home component renders with text \"Dashboard\" and \"Vendite totali\".\n2) Navigate to /build/dashboard/test-tracker and assert the TestTracker component renders with title \"Test Tracker\" and list items including \"Write tests\".\n3) Navigate to /build/examples/non-existent (or any clearly missing component) and assert the DynamicWrapper error UI appears with heading \"Error loading component\".\n4) Optional: Navigate using kebab-case (/build/dashboard/test-tracker) to validate kebab-to-PascalCase mapping in builder.\nUse Testing Library queries (getByText) robustly with case-insensitive matching.\nAssume dev server on http://localhost:4321.\n",
+    "envs": {
+      "API_KEY": "sk-user-hOqTkSPMO_AwnVTkQ-Qk2mE7sqiw7R30efgn1uhFeq1O-lsZIIjL44GtmJncEUm7gHPogj0kKDKUddQcf2ZvlvHP3GJpqGe81CrIkBcl3SegqMQFQsDrdTyesI32DSfC_Hw"
+    }
+  }
 }
