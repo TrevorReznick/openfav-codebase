@@ -7,14 +7,19 @@ import { ThemeProvider } from '@/react/providers/themeProvider'
 import { ThemeToggle } from '~/react/components/common/ThemeToggle'
 import { NavigationProvider } from '@/react/hooks/useNavigation'
 import LoadingFallback from '@/react/components/common/LoadingFallback'
+import DynamicWrapper from '@/react/wrappers/dynamicWrapper'
 
 interface AppClientProps {
   componentName?: string
+  componentPath?: string
   useQueryString?: boolean
   children?: ReactNode
   additionalProviders?: Array<ComponentType<{ children: ReactNode }>>
   showThemeToggle?: boolean
   showToaster?: boolean
+  // Props passed through to DynamicWrapper
+  wrapperProps?: Record<string, any>
+  wrapperDebug?: boolean
 }
 
 // QueryClient for React Query
@@ -29,11 +34,14 @@ const queryClient = new QueryClient({
 
 const AppClient: FC<AppClientProps> = ({
   componentName,
+  componentPath,
   useQueryString = false,
   children,
   additionalProviders = [],
   showThemeToggle = false,
   showToaster = true,
+  wrapperProps = {},
+  wrapperDebug = true,
 }) => {
   // Base providers with QueryClient and Theme
   const providers: Array<ComponentType<{ children: ReactNode }>> = [
@@ -50,14 +58,14 @@ const AppClient: FC<AppClientProps> = ({
 
   // State for component loading
   const [componentState, setComponentState] = useState({
-    name: componentName || null,
+    name: componentName || componentPath || null,
     error: null as Error | null,
-    isLoading: !!componentName,
+    isLoading: !!(componentName || componentPath),
   })
 
   // Load component when componentName changes
   useEffect(() => {
-    if (!componentName) {
+    if (!componentName && !componentPath) {
       setComponentState({ name: null, error: null, isLoading: false });
       return;
     }
@@ -69,20 +77,20 @@ const AppClient: FC<AppClientProps> = ({
         setComponentState(prev => ({ ...prev, isLoading: true, error: null }));
         
         // Get component config using getDynamicComponent
-        await getDynamicComponent(componentName);
+        await getDynamicComponent(componentName || componentPath!);
         
         if (isMounted) {
           setComponentState({
-            name: componentName,
+            name: componentName || componentPath || null,
             error: null,
             isLoading: false,
           });
         }
       } catch (error) {
-        console.error(`Failed to load component ${componentName}:`, error);
+        console.error(`Failed to load component ${componentName || componentPath}:`, error);
         if (isMounted) {
           setComponentState({
-            name: componentName,
+            name: componentName || componentPath || null,
             error: error as Error,
             isLoading: false,
           });
@@ -95,14 +103,14 @@ const AppClient: FC<AppClientProps> = ({
     return () => {
       isMounted = false
     }
-  }, [componentName])
+  }, [componentName, componentPath])
 
   // Create the dynamic component with React.lazy
   const DynamicComponent = useMemo(() => {
     if (!componentState.name || componentState.isLoading || componentState.error) {
       return null;
     }
-    
+    // Keep legacy lazy path for backward compatibility when not using DynamicWrapper
     return lazy(async () => {
       try {
         const config = await getDynamicComponent(componentState.name!);
@@ -170,16 +178,25 @@ const AppClient: FC<AppClientProps> = ({
         </div>
       )}
 
-      {/* Dynamic Component */}
-      <Suspense fallback={renderFallback()}>
-        {DynamicComponent ? (
-          <DynamicComponent />
-        ) : componentState.error ? (
-          renderFallback()
-        ) : componentState.isLoading ? (
-          renderFallback()
-        ) : null}
-      </Suspense>
+      {/* Dynamic Component - prefer DynamicWrapper when a target is provided */}
+      {componentName || componentPath ? (
+        <DynamicWrapper 
+          componentName={componentName}
+          componentPath={componentPath}
+          debug={wrapperDebug}
+          props={wrapperProps}
+        />
+      ) : (
+        <Suspense fallback={renderFallback()}>
+          {DynamicComponent ? (
+            <DynamicComponent />
+          ) : componentState.error ? (
+            renderFallback()
+          ) : componentState.isLoading ? (
+            renderFallback()
+          ) : null}
+        </Suspense>
+      )}
 
       {/* Children */}
       {children && (

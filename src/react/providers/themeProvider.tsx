@@ -26,22 +26,31 @@ export function ThemeProvider({
   storageKey = 'vite-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  )
+  const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined'
+
+  // During SSR, default to defaultTheme. In the browser, hydrate from localStorage if available.
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (isBrowser) {
+      const stored = localStorage.getItem(storageKey) as Theme | null
+      return stored || defaultTheme
+    }
+    return defaultTheme
+  })
 
   useEffect(() => {
+    if (!isBrowser) return
     const root = window.document.documentElement
     root.classList.remove('light', 'dark')
     root.classList.add(theme)
-    
     localStorage.setItem(storageKey, theme)
-  }, [theme, storageKey])
+  }, [theme, storageKey, isBrowser])
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
+      if (isBrowser) {
+        localStorage.setItem(storageKey, theme)
+      }
       setTheme(theme)
     },
   }

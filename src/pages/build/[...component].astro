@@ -1,7 +1,7 @@
 ---
 // src/pages/[...component].astro
 import ThemeLayout from '@/layouts/Layout.astro';
-import DynamicWrapper from '@/react/wrappers/dynamicWrapper.tsx';
+import AppClient from '@/react/AppClient.tsx';
 
 // Type definitions
 interface ComponentParams {
@@ -69,15 +69,17 @@ console.log('[build/[component].astro] Component resolution:', {
     console.log('[build/[component].astro] Client-side execution started');
     console.log('[build/[component].astro] Component path:', `{componentPath}`);
   </script>
-  
-  <DynamicWrapper 
-    client:load 
+
+  <AppClient 
+    client:load
     componentPath={componentPath}
-    props={{
+    wrapperProps={{
       astroUrl: Astro.url,
       astroParams: params,
       originalPath,
       debug: true
     }}
+    wrapperDebug={true}
+    showToaster={true}
   />
 </ThemeLayout>
