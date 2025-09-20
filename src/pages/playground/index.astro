@@ -1,0 +1,21 @@
+---
+import ThemeLayout from '@/layouts/Layout.astro';
+import AppClient from '@/react/AppClient.tsx';
+---
+
+<ThemeLayout layout="default">
+  <section class="container mx-auto px-4 py-8 space-y-4">
+    <h1 class="text-2xl font-bold">Dynamic Loader Playground</h1>
+    <p class="text-sm text-muted-foreground">
+      Pass a query string to load components dynamically with <code>AppClient</code>.
+      Examples:
+    </p>
+    <ul class="list-disc pl-6 text-sm">
+      <li><a class="underline" href="/playground?component=home">/playground?component=home</a></li>
+      <li><a class="underline" href="/playground?path=dashboard/TestTracker">/playground?path=dashboard/TestTracker</a></li>
+      <li><a class="underline" href="/playground#examples/TestComponent">/playground#examples/TestComponent</a> (hash)</li>
+    </ul>
+  </section>
+
+  <AppClient client:load useQueryString={true} showToaster={true} />
+</ThemeLayout>

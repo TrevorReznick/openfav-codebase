@@ -56,16 +56,44 @@ const AppClient: FC<AppClientProps> = ({
     ...additionalProviders,
   ]
 
+  // Derived target from URL when useQueryString is enabled
+  const [derivedTarget, setDerivedTarget] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!useQueryString) return
+    if (componentName || componentPath) return
+    if (typeof window === 'undefined') return
+
+    try {
+      const url = new URL(window.location.href)
+      const params = url.searchParams
+      const fromQuery =
+        params.get('component') ||
+        params.get('path') ||
+        params.get('c') ||
+        params.get('p')
+      const fromHash = url.hash ? url.hash.replace(/^#/, '') : ''
+      const target = (fromQuery || fromHash || '').trim()
+      if (target) {
+        setDerivedTarget(target)
+      }
+    } catch (e) {
+      console.warn('[AppClient] Failed to derive target from URL:', e)
+    }
+  }, [useQueryString, componentName, componentPath])
+
+  const effectiveTarget = componentName || componentPath || derivedTarget || null
+
   // State for component loading
   const [componentState, setComponentState] = useState({
-    name: componentName || componentPath || null,
+    name: effectiveTarget,
     error: null as Error | null,
-    isLoading: !!(componentName || componentPath),
+    isLoading: !!effectiveTarget,
   })
 
   // Load component when componentName changes
   useEffect(() => {
-    if (!componentName && !componentPath) {
+    if (!effectiveTarget) {
       setComponentState({ name: null, error: null, isLoading: false });
       return;
     }
@@ -77,20 +105,20 @@ const AppClient: FC<AppClientProps> = ({
         setComponentState(prev => ({ ...prev, isLoading: true, error: null }));
         
         // Get component config using getDynamicComponent
-        await getDynamicComponent(componentName || componentPath!);
+        await getDynamicComponent(effectiveTarget!);
         
         if (isMounted) {
           setComponentState({
-            name: componentName || componentPath || null,
+            name: effectiveTarget,
             error: null,
             isLoading: false,
           });
         }
       } catch (error) {
-        console.error(`Failed to load component ${componentName || componentPath}:`, error);
+        console.error(`Failed to load component ${effectiveTarget}:`, error);
         if (isMounted) {
           setComponentState({
-            name: componentName || componentPath || null,
+            name: effectiveTarget,
             error: error as Error,
             isLoading: false,
           });
@@ -103,7 +131,7 @@ const AppClient: FC<AppClientProps> = ({
     return () => {
       isMounted = false
     }
-  }, [componentName, componentPath])
+  }, [effectiveTarget])
 
   // Create the dynamic component with React.lazy
   const DynamicComponent = useMemo(() => {
@@ -179,10 +207,10 @@ const AppClient: FC<AppClientProps> = ({
       )}
 
       {/* Dynamic Component - prefer DynamicWrapper when a target is provided */}
-      {componentName || componentPath ? (
+      {effectiveTarget ? (
         <DynamicWrapper 
           componentName={componentName}
-          componentPath={componentPath}
+          componentPath={componentPath || derivedTarget || undefined}
           debug={wrapperDebug}
           props={wrapperProps}
         />
