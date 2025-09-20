@@ -22,3 +22,13 @@ declare module 'openfav:config' {
   export const UI: OpenfavUIConfig
   export const ANALYTICS: OpenfavAnalyticsConfig
 }
+
+// Vite/Astro env typings
+interface ImportMetaEnv {
+  readonly PUBLIC_SUPABASE_URL: string
+  readonly PUBLIC_SUPABASE_ANON_KEY: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}

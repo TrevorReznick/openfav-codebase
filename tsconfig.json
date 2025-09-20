@@ -25,11 +25,7 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["node", "vite/client"],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types"
-    ]
+    "types": ["node", "astro/client"]
   },
   "include": [
     "src/**/*",
