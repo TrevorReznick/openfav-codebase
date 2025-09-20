@@ -29,8 +29,24 @@ const toPascalCase = (str: string): string => {
 const params = Astro.params as ComponentParams;
 const originalPath = params.component?.toString() || 'home/HomePage';
 
+// Default: convert kebab-case segments to PascalCase (directory structure preserved)
+// But preserve known base directories in lowercase to match filesystem
+const BASE_KEYS = ['auth', 'dashboard', 'examples', 'common', 'components', 'home'];
+const parts = originalPath.split('/');
+let componentPath = '';
+if (parts.length > 0) {
+  const first = parts[0];
+  const baseMatch = BASE_KEYS.find((b) => b.toLowerCase() === first.toLowerCase());
+  if (baseMatch) {
+    const rest = parts.slice(1).join('/');
+    const restPascal = rest ? toPascalCase(rest) : '';
+    componentPath = restPascal ? `${baseMatch}/${restPascal}` : baseMatch;
+  } else {
+    componentPath = toPascalCase(originalPath);
+  }
+}
+
 // Handle test-component specifically - always use examples/TestComponent
-let componentPath = originalPath;
 if (originalPath === 'test-component' || originalPath.endsWith('test-component')) {
   componentPath = 'examples/TestComponent';
 }

@@ -5,7 +5,8 @@ import { getDynamicComponent } from '@/react/lib/autoComponentLoader'
 import LoadFallback from '@/react/components/common/LoadFallback'
 
 interface DynamicWrapperProps {
-  componentPath: string
+  componentPath?: string
+  componentName?: string
   props?: Record<string, any>
   fallback?: React.ComponentType
   debug?: boolean
@@ -20,11 +21,13 @@ const DebugInfo: React.FC<{ label: string; value: any }> = ({ label, value }) =>
 
 const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
   componentPath,
+  componentName,
   props = {},
   fallback: CustomFallback = LoadFallback,
   debug = true,
   render
 }) => {
+  const target = componentPath || componentName || '';
   const [Component, setComponent] = useState<React.ComponentType | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loadingState, setLoadingState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -32,10 +35,10 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
   // Debug log only when componentPath changes
   useEffect(() => {
     if (debug) {
-      console.log(`[DynamicWrapper] Mounted/Updated with componentPath: ${componentPath}`);
+      console.log(`[DynamicWrapper] Mounted/Updated with target: ${target}`);
       console.log(`[DynamicWrapper] Current state:`, { loadingState, hasComponent: !!Component, error });
     }
-  }, [componentPath, debug]);
+  }, [target, debug]);
 
   useEffect(() => {
     let isMounted = true;
@@ -51,11 +54,11 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
         setError(null);
         
         if (debug) {
-          console.log(`[DynamicWrapper] Starting to load component: ${componentPath}`)
+          console.log(`[DynamicWrapper] Starting to load component: ${target}`)
           console.trace('[DynamicWrapper] Stack trace for component load');
         }
         
-        const config = await getDynamicComponent(componentPath, debug)
+        const config = await getDynamicComponent(target, debug)
         if (debug) {
           console.log('[DynamicWrapper] Successfully got component config')
           console.log('[DynamicWrapper] Config details:', {
@@ -70,16 +73,16 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
         // Create a lazy-loaded component with the config's loader
         const LazyComponent = lazy(async () => {
           try {
-            if (debug) console.log('[DynamicWrapper] Starting lazy load for component:', componentPath);
+            if (debug) console.log('[DynamicWrapper] Starting lazy load for component:', target);
             const module = await config.loader();
             if (debug) {
-              console.log('[DynamicWrapper] Successfully loaded component module:', componentPath);
+              console.log('[DynamicWrapper] Successfully loaded component module:', target);
               console.log('[DynamicWrapper] Module exports:', Object.keys(module));
               console.log('[DynamicWrapper] Default export exists:', 'default' in module);
             }
             return module;
           } catch (err) {
-            console.error(`[DynamicWrapper] Error in lazy loading ${componentPath}:`, err)
+            console.error(`[DynamicWrapper] Error in lazy loading ${target}:`, err)
             throw err;
           }
         });
@@ -89,7 +92,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
           setLoadingState('success')
         }
       } catch (err) {
-        console.error(`[DynamicWrapper] Error loading component '${componentPath}':`, err)
+        console.error(`[DynamicWrapper] Error loading component '${target}':`, err)
         if (isMounted) {
           setError(err instanceof Error ? err : new Error(String(err)))
           setLoadingState('error')
@@ -102,7 +105,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
     return () => {
       isMounted = false
     };
-  }, [componentPath, debug])
+  }, [target, debug])
 
   // Render loading state
   if (loadingState === 'loading') {
@@ -149,7 +152,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
             <div className="p-4 border border-red-500 bg-red-50 dark:bg-red-900/20 rounded">
               <h3 className="text-red-700 dark:text-red-300 font-bold mb-2">Component Error</h3>
               <div className="mb-2 text-sm">
-                <span className="font-medium">Path:</span> {componentPath}
+                <span className="font-medium">Path:</span> {target}
               </div>
               <pre className="text-xs text-red-600 dark:text-red-400 overflow-x-auto p-2 bg-red-100 dark:bg-red-900/30 rounded">
                 {boundaryError.message}
@@ -166,7 +169,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
           <Suspense fallback={<CustomFallback />}>
             {debug && (
               <div className="mb-2 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs">
-                <div className="font-mono text-green-600 dark:text-green-400">Loaded: {componentPath}</div>
+                <div className="font-mono text-green-600 dark:text-green-400">Loaded: {target}</div>
                 {props && Object.keys(props).length > 0 && <DebugInfo label="Props" value={props} />}
               </div>
             )}
@@ -184,7 +187,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({
     <div className="p-4 border border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 rounded">
       <p className="text-yellow-700 dark:text-yellow-300 font-medium">No component loaded</p>
       <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        <div>Path: <code className="text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">{componentPath}</code></div>
+        <div>Path: <code className="text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">{target}</code></div>
         <div className="mt-1 text-xs text-gray-500 dark:text-gray-500">
           This might be due to an incorrect path or the component might not exist.
         </div>
