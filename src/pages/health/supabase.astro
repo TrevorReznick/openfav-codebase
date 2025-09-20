@@ -1,0 +1,31 @@
+---
+const url = import.meta.env.PUBLIC_SUPABASE_URL
+const anon = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+const hasUrl = Boolean(url && url.length > 0)
+const hasAnon = Boolean(anon && anon.length > 0)
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Supabase Health</title>
+  </head>
+  <body style="font-family: ui-sans-serif, system-ui; padding: 24px;">
+    <h1>Supabase Health</h1>
+    <p>Diagnostica variabili d'ambiente pubbliche</p>
+
+    <ul>
+      <li><strong>PUBLIC_SUPABASE_URL</strong>: {hasUrl ? 'SET' : 'MISSING'}</li>
+      <li><strong>PUBLIC_SUPABASE_ANON_KEY</strong>: {hasAnon ? 'SET' : 'MISSING'}</li>
+    </ul>
+
+    {(!hasUrl || !hasAnon) && (
+      <div style="margin-top: 12px; padding: 12px; background: #fff7ed; border: 1px solid #fed7aa;">
+        <p>
+          Imposta le variabili in <code>.env.local</code> poi riavvia <code>npm run dev</code> e ricarica questa pagina.
+        </p>
+      </div>
+    )}
+  </body>
+</html>
