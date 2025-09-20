@@ -1,6 +1,5 @@
 import { lazy } from 'react'
 import type { ComponentType } from 'react'
-import path from 'path'
 
 const COMPONENT_BASES = {
   // Percorsi diretti per specifici "moduli" dell'app
@@ -8,7 +7,7 @@ const COMPONENT_BASES = {
   dashboard: '/src/react/components/dashboard',
   examples: '/src/react/components/examples',
   common: '/src/react/components/common',
-  // Fallback: cerca nella cartella principale dei componenti come ultima risorsa
+  // Fallback: cartella principale dei componenti
   components: '/src/react/components'
 } as const
 
@@ -24,117 +23,76 @@ export async function getDynamicComponent(
   componentPath: string,
   debug = false
 ): Promise<AutoComponentConfig> {
+  // Costruiamo un registry dei moduli disponibili con Vite
+  const registry: Record<string, () => Promise<{ default: ComponentType<any> }>> = {
+    ...import.meta.glob('/src/react/components/**/*.{ts,tsx,js,jsx}'),
+  } as any;
+
+  const normalize = (p: string) => {
+    // Supporta alias '@/': converte in '/src/...'
+    const withAlias = p.startsWith('~/') ? p.replace('~/', '/src/') : p;
+    const abs = withAlias.startsWith('@/') ? withAlias.replace('@/', '/src/') : withAlias;
+    return abs;
+  };
+
+  const ensureCandidates = (abs: string) => {
+    // Genera varianti: con/ senza estensione, e index.*
+    const exts = ['.tsx', '.ts', '.jsx', '.js'];
+    const hasExt = /\.(tsx|ts|jsx|js)$/.test(abs);
+    const candidates: string[] = [];
+
+    if (hasExt) {
+      candidates.push(abs);
+    } else {
+      for (const ext of exts) candidates.push(abs + ext);
+    }
+
+    // index variants se punta a una directory
+    const withoutTrailingSlash = abs.endsWith('/') ? abs.slice(0, -1) : abs;
+    const idxBase = withoutTrailingSlash + '/index';
+    for (const ext of exts) candidates.push(idxBase + ext);
+
+    return candidates;
+  };
+
+  const tryFromRegistry = (abs: string) => {
+    const candidates = ensureCandidates(abs);
+    for (const c of candidates) {
+      if (registry[c]) return c;
+    }
+    return null;
+  };
+
   if (debug) {
-    console.log('[autoComponentLoader] ===== Starting component resolution =====');
-    console.log('[autoComponentLoader] Component path:', componentPath);
-    console.log('[autoComponentLoader] Available component bases:', Object.entries(COMPONENT_BASES).map(([k, v]) => `${k}: ${v}`).join('\n  '));
-    console.log('[autoComponentLoader] Current working directory:', process.cwd());
+    console.log('[autoComponentLoader] ===== Starting component resolution (glob) =====');
+    console.log('[autoComponentLoader] Input path:', componentPath);
   }
 
-  // If the path already starts with @, use it as is
-  if (componentPath.startsWith('@/')) {
-    const potentialPath = componentPath;
-    if (debug) {
-      console.log(`[autoComponentLoader] Using direct @ path: ${potentialPath}`);
-    }
-    
-    try {
-      const componentModule = await import(/* @vite-ignore */ potentialPath);
-      if (componentModule && componentModule.default) {
-        if (debug) {
-          console.log(`[autoComponentLoader] ✅ Successfully imported component from ${potentialPath}`);
-          console.log('[autoComponentLoader] Component exports:', Object.keys(componentModule));
-        }
-        return {
-          loader: () => import(/* @vite-ignore */ potentialPath),
-          layout: 'default',
-          requiredAuth: false
-        };
-      }
-    } catch (error) {
-      if (debug) {
-        if (error instanceof Error) {
-          console.error(`[autoComponentLoader] ❌ Failed to load component from ${potentialPath}:`, error.message);
-          console.error('Error details:', {
-            name: error.name,
-            stack: error.stack
-          });
-        } else {
-          console.error(`[autoComponentLoader] ❌ Unknown error loading component from ${potentialPath}:`, error);
-        }
-      }
+  // 1) Prova con il path normalizzato così com'è
+  const directAbs = normalize(componentPath);
+  let matched = tryFromRegistry(directAbs);
+
+  // 2) Se non trovato e non inizia da '/src/react/components', prova a pre-pendere ciascuna base
+  if (!matched && !directAbs.startsWith('/src/react/components')) {
+    for (const [, basePath] of Object.entries(COMPONENT_BASES)) {
+      const abs = normalize(`${basePath}/${componentPath}`);
+      matched = tryFromRegistry(abs);
+      if (matched) break;
     }
   }
 
-  // Fall back to the original behavior for backward compatibility
-  for (const [baseKey, basePath] of Object.entries(COMPONENT_BASES)) {
-    const potentialPath = `@${basePath.substring(4)}/${componentPath}`;
-
-    if (debug) {
-      console.log(`[autoComponentLoader] Tentativo di caricamento dalla base '${baseKey}': ${potentialPath}`);
-    }
-
-    try {
-      if (debug) {
-        console.log(`[autoComponentLoader] Attempting to import from: ${potentialPath}`);
-        console.log(`[autoComponentLoader] Resolved path: ${path.resolve(__dirname, '../../..', potentialPath.replace('@', ''))}.{tsx,jsx,ts,js}`);
-      }
-      
-      // Try to dynamically import the component
-      const componentModule = await import(/* @vite-ignore */ potentialPath);
-
-      if (componentModule && componentModule.default) {
-        if (debug) {
-          console.log('[autoComponentLoader] ✅ Successfully imported component');
-          console.log('[autoComponentLoader] Component exports:', Object.keys(componentModule));
-        }
-        if (debug) {
-          console.log(`[autoComponentLoader] ✅ SUCCESS: Component found at ${potentialPath}`);
-          console.log(`[autoComponentLoader] Component exports:`, Object.keys(componentModule));
-        }
-        
-        // Restituiamo la configurazione corretta con un loader che punta al percorso trovato.
-        return {
-          loader: () => import(/* @vite-ignore */ potentialPath),
-          layout: 'default', // Per ora hardcoded, vedi "Passaggi Successivi"
-          requiredAuth: false // Per ora hardcoded
-        };
-      } else {
-        // If we get here, the module was imported but doesn't have a default export
-        if (debug) {
-          console.warn(`[autoComponentLoader] ⚠️  Invalid module at ${potentialPath} (missing default export)`);
-          console.log('[autoComponentLoader] Module keys:', Object.keys(componentModule));
-        }
-      }
-    } catch (error) {
-      // The module doesn't exist or failed to load
-      if (debug) {
-        console.error(`[autoComponentLoader] ❌ Failed to load module at ${potentialPath}:`);
-        if (error instanceof Error) {
-          console.error('Error details:', {
-            name: error.name,
-            message: error.message,
-            stack: error.stack,
-            constructor: error.constructor.name
-          });
-        } else {
-          console.error('Unknown error type:', error);
-        }
-      }
-    }
+  if (matched) {
+    if (debug) console.log(`[autoComponentLoader] ✅ Matched module: ${matched}`);
+    return {
+      loader: () => registry[matched](),
+      layout: 'default',
+      requiredAuth: false,
+    };
   }
 
-  // If we get here, none of the component bases worked
-  const attemptedPaths = Object.entries(COMPONENT_BASES)
-    .map(([base, path]) => `@${path.substring(4)}/${componentPath}`);
-    
-  const errorMessage = `Failed to find component: ${componentPath} in any of the following locations:\n${attemptedPaths.map(p => `- ${p}`).join('\n')}`;
-  
-  if (debug) {
-    console.error(`[autoComponentLoader] ❌ ${errorMessage}`);
-    console.error('[autoComponentLoader] Current working directory:', process.cwd());
-  }
-  
-  // Lanciamo un errore definitivo.
+  // Nessuna corrispondenza trovata
+  const attemptedPaths = [directAbs, ...Object.values(COMPONENT_BASES).map(b => normalize(`${b}/${componentPath}`))];
+  const errorMessage = `Failed to find component via Vite registry: ${componentPath}\nTried:\n${attemptedPaths.map(p => `- ${p}`).join('\n')}`;
+  if (debug) console.error('[autoComponentLoader] ❌', errorMessage);
   throw new Error(errorMessage);
 }
