@@ -1,117 +1,110 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/react/components/ui/card'
+import React from "react";
 
-export default function Dashboard() {
+const App = () => {
+  // Dati per l'elenco di attività
+  const activities = [
+    { id: 1, task: "Inviare report mensile" },
+    { id: 2, task: "Chiamare il cliente X" },
+    { id: 3, task: "Aggiornare il database" },
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-      
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Users
-            </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2,345</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% from last month
-            </p>
-          </CardContent>
-        </Card>
+    <div style={styles.dashboardContainer}>
+      <h1 style={styles.header}>Dashboard</h1>
+      <div style={styles.content}>
+        {/* Statistiche */}
+        <div style={styles.statsContainer}>
+          <div style={styles.statBox}>
+            <h3 style={styles.statTitle}>Vendite totali</h3>
+            <p style={styles.statValue}>$50,000</p>
+          </div>
+          <div style={styles.statBox}>
+            <h3 style={styles.statTitle}>Clienti attivi</h3>
+            <p style={styles.statValue}>120</p>
+          </div>
+          <div style={styles.statBox}>
+            <h3 style={styles.statTitle}>Compiti completati</h3>
+            <p style={styles.statValue}>8/10</p>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Now
-            </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">573</div>
-            <p className="text-xs text-muted-foreground">
-              +201 since last hour
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Revenue
-            </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Now
-            </CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+573</div>
-            <p className="text-xs text-muted-foreground">
-              +201 since last hour
-            </p>
-          </CardContent>
-        </Card>
+        {/* Elenco attività */}
+        <div style={styles.activitiesContainer}>
+          <h3 style={styles.sectionTitle}>Attività recenti</h3>
+          <ul style={styles.activityList}>
+            {activities.map((activity) => (
+              <li key={activity.id} style={styles.activityItem}>
+                {activity.task}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default App;
+
+// Stili definiti come oggetti JavaScript
+const styles = {
+  dashboardContainer: {
+    fontFamily: "Arial, sans-serif",
+    padding: "20px",
+    backgroundColor: "#f4f4f9",
+    minHeight: "100vh",
+  },
+  header: {
+    textAlign: "center",
+    color: "#333",
+  },
+  content: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "20px",
+  },
+  statsContainer: {
+    display: "flex",
+    gap: "20px",
+    justifyContent: "space-between",
+  },
+  statBox: {
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    textAlign: "center",
+  },
+  statTitle: {
+    margin: "0 0 10px",
+    fontSize: "16px",
+    color: "#555",
+  },
+  statValue: {
+    margin: "0",
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  activitiesContainer: {
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  },
+  sectionTitle: {
+    marginBottom: "10px",
+    fontSize: "18px",
+    color: "#333",
+  },
+  activityList: {
+    listStyleType: "none",
+    padding: "0",
+  },
+  activityItem: {
+    backgroundColor: "#f9f9f9",
+    marginBottom: "5px",
+    padding: "10px",
+    borderRadius: "4px",
+  },
+};
