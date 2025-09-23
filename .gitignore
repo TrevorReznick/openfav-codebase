@@ -9,3 +9,6 @@
 !.env.example
 
 node_modules/
+.vercel/
+.astro/
+dist/
