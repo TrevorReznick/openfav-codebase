@@ -2,21 +2,116 @@
 interface Props {
   title?: string
   layout?: 'default' | 'dashboard' // Add this line
+  description?: string;
 }
 
-const { title } = Astro.props;
+// Default props
+const { title = 'OpenFav', description = 'Your favorite open source projects' } = Astro.props;
+// Get the current theme from cookies or default to system preference
+const theme = Astro.cookies.get('theme')?.value || 'system';
+
+// Add theme class to HTML element
+const htmlClass = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : '';
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="it" class={htmlClass}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {title && <title>{title} | OpenFav Test</title>}
-    <slot name="head" />
+    <title>{title}</title>
+    
+    <!-- Theme Script -->
+    <script is:inline>
+      // Check for saved theme preference or use system preference
+      (function() {
+        const theme = localStorage.getItem('theme') || 'system';
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Apply theme class
+        if (theme === 'dark' || (theme === 'system' && systemDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        
+        // Listen for system theme changes when in 'system' mode
+        if (theme === 'system') {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          });
+        }
+      })();
+    </script>
   </head>
-  <body class="min-h-screen bg-white text-gray-900">
+  <body class="min-h-screen bg-background font-sans antialiased transition-colors text-foreground">
     <slot />
   </body>
 </html>
+
+<style is:global>
+  /* Base styles */
+  :root {
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    
+    --radius-sm: 0.25rem;
+    --radius: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+  }
+
+  /* Base element styles */
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: var(--radius);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.5);
+    border-radius: var(--radius);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.7);
+  }
+
+  /* Selection styles */
+  ::selection {
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Remove default button styles */
+  button {
+    all: unset;
+    cursor: pointer;
+  }
+</style>
