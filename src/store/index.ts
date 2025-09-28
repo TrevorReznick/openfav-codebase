@@ -6,6 +6,9 @@ export const currentPath = atom<string>('/')
 export const previousPath = atom<string>('/')
 
 /* @@ test @@ */
+export const testUsername = atom<string>("Guest")
+export const counter = atom<number>(0)
+export const theme = atom<"light" | "dark">("light")
 
 export const counterStore = atom<number>(0)
 

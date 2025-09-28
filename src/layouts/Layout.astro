@@ -1,21 +1,28 @@
 ---
 interface Props {
   title?: string
-  layout?: 'default' | 'dashboard' // Add this line
+  layout?: 'default' | 'dashboard'
   description?: string;
 }
 
 // Default props
 const { title = 'OpenFav', description = 'Your favorite open source projects' } = Astro.props;
-// Get the current theme from cookies or default to system preference
-const theme = Astro.cookies.get('theme')?.value || 'system';
 
-// Add theme class to HTML element
+// Get the theme from cookies or default to system
+let theme = 'system';
+if (Astro.cookies.has('theme')) {
+  theme = Astro.cookies.get('theme').value;
+}
+
+// Log the theme
+console.log(`[theme][layout] Initial theme from cookies: ${theme}`);
+
+// Add theme class to HTML element (server-side)
 const htmlClass = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : '';
 ---
 
 <!DOCTYPE html>
-<html lang="it" class={htmlClass}>
+<html lang="it" class={htmlClass} data-theme={theme}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -24,6 +31,99 @@ const htmlClass = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : '';
     <title>{title}</title>
     
     <!-- Theme Script -->
+    <script is:inline>
+      // Theme management
+      function applyTheme(theme) {
+        // Skip if no theme provided
+        if (!theme) return;
+        
+        const html = document.documentElement;
+        const isSystem = theme === 'system';
+        const resolvedTheme = isSystem 
+          ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          : theme;
+        
+        // Update classes and attributes
+        html.classList.remove('light', 'dark');
+        html.classList.add(resolvedTheme);
+        html.setAttribute('data-theme', theme);
+        
+        // Sync to all storage mechanisms
+        try {
+          localStorage.setItem('theme', theme);
+          document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+        } catch (e) {
+          console.warn('[theme][layout] Error saving theme:', e);
+        }
+        
+        // Debug logging
+        console.group('[theme][layout] Theme Update');
+        console.log('Requested theme:', theme);
+        console.log('Resolved theme:', resolvedTheme);
+        console.log('System preference:', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        console.log('HTML classes:', html.className);
+        console.log('data-theme:', html.getAttribute('data-theme'));
+        console.groupEnd();
+      }
+      
+      // Handle theme changes from components
+      window.addEventListener('theme-change', (e) => {
+        const theme = e.detail?.theme;
+        if (theme) {
+          applyTheme(theme);
+        }
+      });
+      
+      // Initialize theme on load
+      document.addEventListener('DOMContentLoaded', () => {
+        // Get theme from different sources in order of priority
+        const sources = {
+          localStorage: null,
+          cookie: null,
+          server: document.documentElement.getAttribute('data-theme'),
+          system: 'system'
+        };
+        
+        // Try to get theme from localStorage
+        try {
+          sources.localStorage = localStorage.getItem('theme');
+        } catch (e) {
+          console.warn('[theme][layout] Could not access localStorage:', e);
+        }
+        
+        // Try to get theme from cookies
+        try {
+          const cookieMatch = document.cookie.match(/theme=([^;]+)/);
+          sources.cookie = cookieMatch?.[1];
+        } catch (e) {
+          console.warn('[theme][layout] Could not read cookies:', e);
+        }
+        
+        // Log available theme sources
+        console.group('[theme][layout] Theme Sources');
+        console.log('localStorage:', sources.localStorage);
+        console.log('cookie:', sources.cookie);
+        console.log('server:', sources.server);
+        console.groupEnd();
+        
+        // Determine which theme to apply
+        const themeToApply = sources.localStorage || sources.cookie || sources.server || sources.system;
+        console.log('[theme][layout] Applying theme:', themeToApply);
+        
+        // Apply the theme
+        applyTheme(themeToApply);
+      });
+      
+      // Watch for system theme changes when in 'system' mode
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleSystemThemeChange = () => {
+        if (localStorage.getItem('theme') === 'system') {
+          applyTheme('system');
+        }
+      };
+      mediaQuery.addEventListener('change', handleSystemThemeChange);
+    </script>
+    
     <script is:inline>
       // Check for saved theme preference or use system preference
       (function() {
