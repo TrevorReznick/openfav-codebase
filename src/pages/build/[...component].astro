@@ -1,7 +1,12 @@
 ---
 // src/pages/[...component].astro
+import "@/styles/globals.css"
+//import Layout from "@/layouts/Layout.astro"
 import ThemeLayout from '@/layouts/Layout.astro';
 import AppClient from '@/react/AppClient.tsx';
+
+// Log the current page
+console.log(`[page][${Astro.url.pathname}]`);
 
 // Type definitions
 interface ComponentParams {
@@ -64,12 +69,27 @@ console.log('[build/[component].astro] Component resolution:', {
 ---
 
 <ThemeLayout layout={layoutType}>
-  <script>
-    // Client-side debug logs
-    console.log('[build/[component].astro] Client-side execution started');
-    console.log('[build/[component].astro] Component path:', `{componentPath}`);
-  </script>
+  <script data-component-path={componentPath}>
+    // Import ThemeInjector for client-side theme management
+    import { globalThemeInjector } from '@/react/lib/themeInjector.ts';
 
+    // Client-side debug logs and theme management
+    document.addEventListener('astro:page-load', () => {
+      console.log('[build/[component].astro] Client-side execution started');
+      console.log(`[build/[component].astro] Component path: ${document.currentScript?.getAttribute('data-component-path') || 'unknown'}`);
+
+      // Initialize theme using ThemeInjector
+      const initialTheme = globalThemeInjector.getTheme();
+      console.log(`[theme-injector][component] Initialized with theme: ${initialTheme}`);
+
+      // Listen for theme change events dispatched by ThemeInjector
+      document.addEventListener('theme-change', (event) => {
+        // @ts-ignore
+        const { theme, resolvedTheme } = event.detail;
+        console.log(`[theme-change][component] Theme changed to: ${theme} (resolved: ${resolvedTheme})`);
+      });
+    });
+  </script>
   <AppClient 
     client:load
     componentPath={componentPath}
