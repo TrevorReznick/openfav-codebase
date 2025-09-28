@@ -1,5 +1,30 @@
 [
   {
+    "id": "TC000",
+    "title": "Theme System - Initial Load and Default Theme",
+    "description": "Verify the default theme behavior on initial application load with no prior preferences.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Clear all browser storage and cookies for the application domain."
+      },
+      {
+        "type": "action",
+        "description": "Load the application with system preference set to light mode."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the application loads with light theme by default."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that no theme preference is stored in localStorage."
+      }
+    ]
+  },
+  {
     "id": "TC001",
     "title": "Theme System - Light Mode Selection and Persistence",
     "description": "Verify that the user can select Light mode in the theme toggle, that the preference is applied immediately with smooth transition, saved locally, and persisted across page reloads.",
@@ -408,6 +433,109 @@
   },
   {
     "id": "TC016",
+    "title": "Theme System - Theme Toggle Component Behavior",
+    "description": "Verify the ThemeToggle component correctly reflects current theme state and allows switching between themes.",
+    "category": "ui",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load the application with light theme active."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the ThemeToggle displays the sun icon (indicating light mode)."
+      },
+      {
+        "type": "action",
+        "description": "Click the ThemeToggle to switch to dark theme."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the ThemeToggle updates to show the moon icon (indicating dark mode)."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the theme preference is saved in localStorage."
+      },
+      {
+        "type": "action",
+        "description": "Reload the page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the ThemeToggle maintains the correct state after reload."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Theme System - Browser Storage Persistence",
+    "description": "Verify that theme preferences are correctly persisted across different browser sessions.",
+    "category": "persistence",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Set theme to dark mode using the ThemeToggle."
+      },
+      {
+        "type": "action",
+        "description": "Close the browser completely."
+      },
+      {
+        "type": "action",
+        "description": "Reopen the browser and navigate to the application."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dark theme is still applied."
+      },
+      {
+        "type": "action",
+        "description": "Clear browser storage and cookies."
+      },
+      {
+        "type": "action",
+        "description": "Reload the application."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the application returns to default theme after storage is cleared."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Theme System - Theme Toggle Accessibility",
+    "description": "Verify the ThemeToggle is accessible via keyboard and screen readers.",
+    "category": "accessibility",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the ThemeToggle using keyboard (Tab key)."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the ThemeToggle receives focus and shows focus indicator."
+      },
+      {
+        "type": "action",
+        "description": "Press Enter/Space key to toggle the theme."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the theme toggles and the screen reader announces the change."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the ThemeToggle has appropriate ARIA attributes."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
     "title": "Reusable UI Components - ThemeToggle Interaction and Feedback",
     "description": "Check that the ThemeToggle component correctly reflects current mode, allows switching modes with immediate visual feedback, and is keyboard accessible.",
     "category": "ui",
