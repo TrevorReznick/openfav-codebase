@@ -1,0 +1,127 @@
+# OpenFav Workspace Scan Complete
+
+## Project Overview
+
+__OpenFav__ is a modern web application built with Astro and React that provides a platform for users to organize and manage their digital resources. It's currently in version 0.0.1 and deployed on Vercel.
+
+## Architecture & Technology Stack
+
+### Frontend Framework
+
+- __Astro 5.13.4__ - Main framework with server-side rendering
+- __React 18.3.1__ - Component library for interactive UI
+- __TypeScript__ - Type safety throughout the codebase
+- __Tailwind CSS__ - Utility-first styling with custom theming
+
+### Backend & Database
+
+- __Supabase__ - Authentication and database (PostgreSQL)
+- __Vercel__ - Deployment platform with serverless functions
+
+### Key Dependencies
+
+- __Radix UI__ - Comprehensive component library (accordion, dialog, dropdown, etc.)
+- __React Query (@tanstack/react-query)__ - Data fetching and caching
+- __Framer Motion__ - Animations
+- __React Hook Form__ - Form handling
+- __Nanostores__ - State management
+- __Zod__ - Schema validation
+
+## Project Structure
+
+### Configuration
+
+- __astro.config.mjs__ - Astro configuration with React integration, Vercel adapter, and custom plugins
+- __src/config.yaml__ - Site configuration including SEO metadata, i18n settings, and theme preferences
+- __tailwind.config.ts__ - Tailwind CSS configuration
+- __vite-plugin-openfav-config.js/ts__ - Custom Vite plugin for configuration management
+
+### Core Features (Based on PRD)
+
+#### 1. Theme System
+
+- Light/Dark mode toggle with system preference detection
+- Persistent theme preferences in localStorage
+- Smooth theme transitions
+
+#### 2. Authentication
+
+- Supabase Auth integration
+- Email/password and social login (Google)
+- Session management and protected routes
+
+#### 3. Dynamic Component Loading
+
+- __AppClient.tsx__ - Main React client with dynamic component loading
+- __DynamicWrapper__ - Component wrapper for code-splitting
+- __autoComponentLoader__ - Automatic component discovery and loading
+
+#### 4. API Layer
+
+- RESTful API endpoints in `/src/pages/api/v1/main/`
+
+- __doQueries.ts__ - Main API router handling CRUD operations for:
+
+  - Sites management (create, read, update, delete)
+  - Events management
+  - Lists management
+
+- Database scripts in `/src/scripts/db/` for sites, events, and lists
+
+### Component Architecture
+
+#### React Components (`/src/react/components/`)
+
+- __auth/__ - Authentication components
+- __common/__ - Shared components (LoadingFallback, ThemeToggle)
+- __dashboard/__ - Dashboard-specific components
+- __examples/__ - Example/test components
+- __home/__ - Homepage components
+- __ui/__ - Radix UI-based design system components
+
+#### Astro Components (`/src/components/`)
+
+- __head/OpenFavHead.astro__ - SEO and metadata management
+- __Layout.astro__ - Main layout wrapper
+
+### Testing Setup
+
+- __Vitest__ - Unit testing framework
+- __React Testing Library__ - Component testing
+- __@testing-library/jest-dom__ - DOM testing utilities
+- Test files located in `__tests__` directories and `/src/test/`
+
+### Development Features
+
+- __Hot Module Replacement__ with Vite
+- __TypeScript__ strict mode enabled
+- __ESLint/Prettier__ configuration (implied by dev dependencies)
+- __Path aliases__ configured (`@/` and `~/` pointing to src)
+
+## Current State Analysis
+
+### Strengths
+
+1. __Modern Tech Stack__ - Uses latest versions of Astro, React, and supporting libraries
+2. __Comprehensive UI Library__ - Full Radix UI integration for accessible components
+3. __Robust Configuration__ - YAML-based configuration with runtime access
+4. __Dynamic Loading__ - Advanced component loading system for performance
+5. __Full-Stack Ready__ - API endpoints and database integration in place
+6. __Testing Infrastructure__ - Complete testing setup with Vitest and RTL
+
+### Areas for Development
+
+1. __Documentation__ - README is still the default Astro template
+2. __Authentication Flow__ - Components exist but may need implementation completion
+3. __Error Handling__ - Comprehensive error boundaries and fallbacks in place
+4. __Performance Optimization__ - Code splitting and lazy loading implemented
+
+## Key Files to Understand
+
+1. __src/react/AppClient.tsx__ - Main React application entry point
+2. __src/pages/api/v1/main/doQueries.ts__ - API router and endpoints
+3. __astro.config.mjs__ - Build and integration configuration
+4. __src/config.yaml__ - Site-wide configuration
+5. __docs/General PRD.txt__ - Product requirements and specifications
+
+The project appears to be a well-architected, modern web application with a solid foundation for building a digital resource management platform.
