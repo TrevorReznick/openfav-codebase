@@ -49,15 +49,32 @@ export default defineConfig({
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        '~': path.resolve(__dirname, './src')
+        '~': path.resolve(__dirname, './src'),
+        // Add alias for design tokens
+        '@/migration/design-system/tokens': path.resolve(__dirname, './src/migration/design-system/tokens')
       }
     },
     plugins: [
       // Use the config plugin
       configPlugin,
-      openfavConfigPlugin(openfavConfig)
+      openfavConfigPlugin(openfavConfig),
+      // Add JSON plugin
+      {
+        name: 'json-plugin',
+        transform(_, id) {
+          if (id.endsWith('.json')) {
+            return {
+              code: `const data = ${JSON.stringify(require(id))}; export default data;`,
+              map: null
+            };
+          }
+        }
+      }
     ],
-    assetsInclude: ['**/*.yaml', '**/*.yml']
+    assetsInclude: ['**/*.yaml', '**/*.yml', '**/*.json'],
+    optimizeDeps: {
+      include: ['**/*.json']
+    }
   },
   integrations: [
     react({
