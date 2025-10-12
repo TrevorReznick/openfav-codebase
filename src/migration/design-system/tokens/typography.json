@@ -1,0 +1,11 @@
+{
+  "fontFamily": {
+    "base": "font-sans",
+    "mono": "font-mono"
+  },
+  "fontSize": {
+    "base": "text-base",
+    "lg": "text-lg",
+    "sm": "text-sm"
+  }
+}
