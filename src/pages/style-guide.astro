@@ -1,0 +1,263 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+// Color palette CORRETTA - senza hsl() wrapper
+const colorPalette = {
+  // Core colors from your CSS
+  background: 'var(--background)',
+  foreground: 'var(--foreground)',
+  
+  // Primary colors
+  primary: {
+    DEFAULT: 'var(--primary)',
+    foreground: 'var(--primary-foreground)',
+    hover: 'var(--primary-hover)',
+  },
+  
+  // Secondary colors  
+  secondary: {
+    DEFAULT: 'var(--secondary)',
+    foreground: 'var(--secondary-foreground)',
+  },
+  
+  // Muted colors
+  muted: {
+    DEFAULT: 'var(--muted)',
+    foreground: 'var(--muted-foreground)',
+  },
+  
+  // Additional colors
+  destructive: {
+    DEFAULT: 'hsl(0 84% 60%)',
+    foreground: 'hsl(210 40% 98%)',
+  },
+  border: 'hsl(214 32% 91%)',
+  input: 'hsl(214 32% 91%)',
+  ring: 'var(--primary)',
+};
+
+// Helper per convertire variabile CSS in HSL completo
+const getHslValue = (cssVar) => {
+  // Se è già un valore HSL, restituiscilo
+  if (cssVar.includes('hsl(')) return cssVar;
+  
+  // Se è una variabile CSS, estrai il valore dal DOM
+  if (cssVar.startsWith('var(--')) {
+    const varName = cssVar.replace('var(', '').replace(')', '');
+    // In Astro non possiamo accedere al DOM a runtime, quindi usiamo un fallback
+    return `hsl(${getFallbackHsl(varName)})`;
+  }
+  
+  return cssVar;
+};
+
+// Fallback values basati sul tuo CSS
+const getFallbackHsl = (varName) => {
+  const fallbacks = {
+    '--background': '220 23% 95%',
+    '--foreground': '234 16% 35%',
+    '--primary': '220 91% 54%',
+    '--primary-foreground': '220 23% 95%',
+    '--primary-hover': '220 91% 44%',
+    '--secondary': '220 16% 80%',
+    '--secondary-foreground': '234 16% 35%',
+    '--muted': '220 23% 95%',
+    '--muted-foreground': '232 10% 53%',
+  };
+  return fallbacks[varName] || '0 0% 50%';
+};
+
+// Helper per il colore del testo
+const getTextColor = (colorValue) => {
+  const hslValue = getHslValue(colorValue);
+  const lightnessMatch = hslValue.match(/hsl\(([^,]+),\s*([^,]+)%?,\s*([^%]+)%\)/);
+  if (lightnessMatch) {
+    const lightness = parseFloat(lightnessMatch[3]);
+    return lightness > 50 ? 'var(--foreground)' : 'var(--background)';
+  }
+  return 'var(--foreground)';
+};
+
+const spacingValues = {
+  0: '0px',
+  1: '0.25rem',
+  2: '0.5rem',
+  3: '0.75rem',
+  4: '1rem',
+  5: '1.25rem',
+  6: '1.5rem',
+  8: '2rem',
+  10: '2.5rem',
+  12: '3rem',
+  16: '4rem',
+  20: '5rem',
+  24: '6rem',
+  32: '8rem'
+};
+---
+
+<Layout title="Style Guide - Progetto A">
+  <div class="container mx-auto p-8 max-w-6xl">
+    <h1 class="text-4xl font-bold mb-8">Design System - Progetto A</h1>
+    
+    <!-- Colors Section -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-8 border-b pb-4">Color Palette</h2>
+
+      <!-- Visual Color Grid -->
+      <div class="mb-12">
+        <h3 class="text-2xl font-semibold mb-6 text-foreground">All Colors</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          {Object.entries(colorPalette).map(([category, colors]) => {
+            if (typeof colors === 'string') {
+              const hslValue = getHslValue(colors);
+              return (
+                <div key={category} class="rounded-lg overflow-hidden border border-border shadow-sm">
+                  <div 
+                    class="h-20 flex items-center justify-center"
+                    style={{ 
+                      backgroundColor: `hsl(${getFallbackHsl(colors.startsWith('var(--') ? colors : `--${category}`)})` 
+                    }}
+                  >
+                    <span 
+                      class="text-xs font-medium px-1 py-0.5 rounded bg-black/20 backdrop-blur-sm"
+                      style={{ color: getTextColor(colors) }}
+                    >
+                      {category}
+                    </span>
+                  </div>
+                  <div class="p-2 bg-card">
+                    <div class="font-mono text-[10px] truncate">{colors}</div>
+                    <div class="font-mono text-[8px] text-muted-foreground truncate mt-0.5">
+                      {hslValue.replace('hsl(', '').replace(')', '')}
+                    </div>
+                  </div>
+                </div>
+              );
+            } else {
+              return Object.entries(colors).map(([shade, colorValue]) => {
+                const displayName = shade === 'DEFAULT' ? category : `${category}-${shade}`;
+                const hslValue = getHslValue(colorValue);
+                const fallbackVar = shade === 'DEFAULT' ? `--${category}` : `--${category}-${shade}`;
+                
+                return (
+                  <div key={displayName} class="rounded-lg overflow-hidden border border-border shadow-sm">
+                    <div 
+                      class="h-20 flex items-center justify-center"
+                      style={{ 
+                        backgroundColor: `hsl(${getFallbackHsl(fallbackVar)})` 
+                      }}
+                    >
+                      <span 
+                        class="text-xs font-medium px-1 py-0.5 rounded bg-black/20 backdrop-blur-sm"
+                        style={{ color: getTextColor(colorValue) }}
+                      >
+                        {shade === 'DEFAULT' ? category : shade}
+                      </span>
+                    </div>
+                    <div class="p-2 bg-card">
+                      <div class="font-mono text-[10px] truncate">{colorValue}</div>
+                      <div class="font-mono text-[8px] text-muted-foreground truncate mt-0.5">
+                        {hslValue.replace('hsl(', '').replace(')', '')}
+                      </div>
+                    </div>
+                  </div>
+                );
+              });
+            }
+          }).flat()}
+        </div>
+      </div>
+
+      <!-- Core Colors -->
+      <div class="mb-12">
+        <h3 class="text-2xl font-semibold mb-6 text-foreground">Core Colors</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Object.entries({
+            'primary': colorPalette.primary,
+            'background': { DEFAULT: colorPalette.background, foreground: colorPalette.foreground },
+            'secondary': colorPalette.secondary,
+            'muted': colorPalette.muted,
+          }).map(([name, colors]) => (
+            <div key={name} class="overflow-hidden rounded-lg border border-border">
+              <h4 class="px-3 py-2 text-sm font-medium bg-muted/50 border-b border-border capitalize">
+                {name}
+              </h4>
+              <div class="p-3">
+                {Object.entries(colors).map(([shade, value]) => {
+                  const fallbackVar = shade === 'DEFAULT' ? `--${name}` : `--${name}-${shade}`;
+                  
+                  return (
+                    <div key={shade} class="mb-2 last:mb-0">
+                      <div class="flex items-center">
+                        <div 
+                          class="w-10 h-10 rounded-md border border-white shadow-sm mr-2 flex-shrink-0 flex items-center justify-center"
+                          style={{ 
+                            backgroundColor: `hsl(${getFallbackHsl(fallbackVar)})` 
+                          }}
+                        >
+                          <span 
+                            class="text-[10px] font-bold"
+                            style={{ color: getTextColor(value) }}
+                          >
+                            {shade === 'DEFAULT' ? 'D' : shade.charAt(0)}
+                          </span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="font-mono text-xs truncate">{value}</div>
+                          <div class="text-[10px] text-muted-foreground truncate">
+                            {getHslValue(value).replace('hsl(', '').replace(')', '')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Live Preview -->
+      <div class="mb-12">
+        <h3 class="text-2xl font-semibold mb-6 text-foreground">Live Preview</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-lg border" style={{ backgroundColor: `hsl(${getFallbackHsl('--background')})` }}>
+            <h4 class="text-lg font-medium mb-2" style={{ color: `hsl(${getFallbackHsl('--foreground')})` }}>
+              Background & Foreground
+            </h4>
+            <p class="text-sm mb-4" style={{ color: `hsl(${getFallbackHsl('--foreground')})` }}>
+              Questo è il colore di testo normale
+            </p>
+            <button class="px-4 py-2 rounded-md text-sm" 
+              style={{ 
+                backgroundColor: `hsl(${getFallbackHsl('--primary')})`,
+                color: `hsl(${getFallbackHsl('--primary-foreground')})`
+              }}>
+              Primary Button
+            </button>
+          </div>
+          
+          <div class="p-6 rounded-lg border" style={{ backgroundColor: `hsl(${getFallbackHsl('--primary')})` }}>
+            <h4 class="text-lg font-medium mb-2" style={{ color: `hsl(${getFallbackHsl('--primary-foreground')})` }}>
+              Primary Background
+            </h4>
+            <p class="text-sm opacity-90 mb-4" style={{ color: `hsl(${getFallbackHsl('--primary-foreground')})` }}>
+              Testo su sfondo primary
+            </p>
+            <button class="px-4 py-2 rounded-md text-sm border" 
+              style={{ 
+                backgroundColor: `hsl(${getFallbackHsl('--primary-hover')})`,
+                color: `hsl(${getFallbackHsl('--primary-foreground')})`
+              }}>
+              Hover State
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resto delle sezioni... -->
+  </div>
+</Layout>

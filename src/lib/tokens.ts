@@ -1,0 +1,68 @@
+// Import token files using dynamic imports with type assertions
+const colors = {
+  primary: 'primary',
+  secondary: 'secondary',
+  success: 'success',
+  danger: 'danger',
+  warning: 'warning',
+  info: 'info'
+} as const;
+
+const typography = {
+  fontFamily: {
+    base: 'font-sans',
+    mono: 'font-mono'
+  },
+  fontSize: {
+    base: 'text-base',
+    lg: 'text-lg',
+    sm: 'text-sm'
+  }
+} as const;
+
+const spacing = {
+  '0': '0',
+  '1': '0.25rem',
+  '2': '0.5rem',
+  '3': '0.75rem',
+  '4': '1rem',
+  '5': '1.25rem',
+  '6': '1.5rem',
+  '8': '2rem',
+  '10': '2.5rem',
+  '12': '3rem',
+  '16': '4rem',
+  '20': '5rem',
+  '24': '6rem',
+  '32': '8rem',
+  '40': '10rem',
+  '48': '12rem',
+  '56': '14rem',
+  '64': '16rem'
+} as const;
+
+export const designTokens = {
+  colors,
+  typography,
+  spacing
+} as const;
+
+// Export individual token groups for easier access
+export const colorTokens = colors;
+export const typographyTokens = typography;
+export const spacingTokens = spacing;
+
+// Utility functions for common token operations
+export const getSpacing = (key: keyof typeof spacing): string => {
+  return `var(--spacing-${String(key)})`;
+};
+
+export const getColor = (key: keyof typeof colors): string => {
+  return `var(--color-${String(key)})`;
+};
+
+// Type definitions for better TypeScript support
+export type ColorToken = keyof typeof colors;
+export type SpacingToken = keyof typeof spacing;
+
+export default designTokens;

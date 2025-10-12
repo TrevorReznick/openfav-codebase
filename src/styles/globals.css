@@ -10,6 +10,40 @@
 
 @layer base {
   :root {
+    /* Design Tokens - Colors */
+    --color-primary: 0 0% 9%;
+    --color-secondary: 0 0% 96.1%;
+    --color-success: 142.1 76.2% 36.3%;
+    --color-danger: 0 84.2% 60.2%;
+    --color-warning: 38 92% 50%;
+    --color-info: 199 89% 48%;
+    
+    /* Design Tokens - Spacing */
+    --spacing-0: 0px;
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+    --spacing-20: 5rem;
+    --spacing-24: 6rem;
+    --spacing-32: 8rem;
+
+    /* Design Tokens - Typography */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+
+    /* Theme Variables */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
