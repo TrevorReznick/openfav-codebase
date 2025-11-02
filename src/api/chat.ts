@@ -23,13 +23,12 @@ interface ChatResponse {
 export async function sendChatMessage(
   prompt: string,
   options: {
-    apiKey: string;
     useTools?: boolean;
     userId?: string;
     messages?: ChatMessage[];
   }
 ): Promise<ChatResponse> {
-  const { apiKey, useTools = false, userId = 'default', messages } = options;
+  const { useTools = false, userId = 'default', messages } = options;
 
   const url = new URL('https://fly-fastapi-composio-agent.fly.dev/api/v1/chat');
   
@@ -38,9 +37,9 @@ export async function sendChatMessage(
   url.searchParams.append('use_tools', useTools.toString());
   url.searchParams.append('user_id', userId);
 
-  const apiKey = import.meta.env.DEEPSEEK_API_KEY;
+  const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
   if (!apiKey) {
-    throw new Error('DEEPSEEK_API_KEY is not defined in environment variables');
+    throw new Error('VITE_DEEPSEEK_API_KEY is not defined in environment variables');
   }
 
   const response = await fetch(url.toString(), {
