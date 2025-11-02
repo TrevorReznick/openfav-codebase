@@ -1,13 +1,13 @@
 {
   "name": "openfav-init",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "exports": {
     ".": "./vendor/integrations/index.ts",
     "./config": "./integrations/files/configBuilder.ts"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
