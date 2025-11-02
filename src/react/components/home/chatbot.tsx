@@ -1,30 +1,57 @@
-import { useState } from 'react';
-import { Send, Bot, User } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Send, Bot, User, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { sendChatMessage } from '@/api/chat';
+import { useToast } from '@/hooks/use-toast';
 
 type Message = {
   id: string;
   content: string;
   isUser: boolean;
   timestamp: Date;
+  isLoading?: boolean;
+  error?: string;
 };
 
-export function Chatbot() {
+interface ChatbotProps {
+  apiKey: string;
+  userId?: string;
+  useTools?: boolean;
+  initialMessage?: string;
+}
+
+export function Chatbot({ 
+  apiKey, 
+  userId = 'default', 
+  useTools = false,
+  initialMessage = 'Ciao! Come posso aiutarti oggi?'
+}: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Ciao! Come posso aiutarti oggi?',
+      content: initialMessage,
       isUser: false,
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || isLoading) return;
 
     // Add user message
     const userMessage: Message = {
@@ -34,19 +61,69 @@ export function Chatbot() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInputValue('');
+    // Add loading message
+    const loadingMessage: Message = {
+      id: `loading-${Date.now()}`,
+      content: '',
+      isUser: false,
+      timestamp: new Date(),
+      isLoading: true,
+    };
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: 'Grazie per il tuo messaggio! Come posso assisterti ulteriormente?',
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botMessage]);
-    }, 1000);
+    setMessages((prev) => [...prev, userMessage, loadingMessage]);
+    setInputValue('');
+    setIsLoading(true);
+
+    try {
+      const response = await sendChatMessage(inputValue, {
+        apiKey,
+        useTools,
+        userId,
+        messages: messages
+          .filter(m => !m.isLoading && !m.error)
+          .map(m => ({
+            role: m.isUser ? 'user' : 'assistant',
+            content: m.content
+          }))
+      });
+
+      // Update loading message with actual response
+      setMessages(prev => {
+        const newMessages = [...prev];
+        const loadingIndex = newMessages.findIndex(m => m.isLoading);
+        if (loadingIndex !== -1) {
+          newMessages[loadingIndex] = {
+            id: Date.now().toString(),
+            content: response.response,
+            isUser: false,
+            timestamp: new Date(),
+          };
+        }
+        return newMessages;
+      });
+    } catch (error) {
+      // Update loading message with error
+      setMessages(prev => {
+        const newMessages = [...prev];
+        const loadingIndex = newMessages.findIndex(m => m.isLoading);
+        if (loadingIndex !== -1) {
+          newMessages[loadingIndex] = {
+            ...newMessages[loadingIndex],
+            isLoading: false,
+            error: 'Errore durante l\'invio del messaggio. Riprova più tardi.',
+          };
+        }
+        return newMessages;
+      });
+      
+      toast({
+        title: 'Errore',
+        description: error instanceof Error ? error.message : 'Si è verificato un errore',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -80,14 +157,34 @@ export function Chatbot() {
                   </AvatarFallback>
                 ) : (
                   <AvatarFallback className="bg-secondary text-primary">
-                    <Bot className="h-4 w-4" />
+                    {message.isLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Bot className="h-4 w-4" />
+                    )}
                   </AvatarFallback>
                 )}
               </Avatar>
               <div
-                className={`rounded-lg px-4 py-2 ${message.isUser ? 'bg-primary text-white' : 'bg-muted'}`}
+                className={`rounded-lg px-4 py-2 ${
+                  message.isUser 
+                    ? 'bg-primary text-white' 
+                    : message.error
+                      ? 'bg-destructive/10 text-destructive'
+                      : 'bg-muted'
+                }`}
               >
-                <p className="text-sm">{message.content}</p>
+                {message.isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="h-2 w-2 rounded-full bg-muted-foreground animate-pulse"></div>
+                    <div className="h-2 w-2 rounded-full bg-muted-foreground animate-pulse delay-150"></div>
+                    <div className="h-2 w-2 rounded-full bg-muted-foreground animate-pulse delay-300"></div>
+                  </div>
+                ) : message.error ? (
+                  <p className="text-sm">{message.error}</p>
+                ) : (
+                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                )}
                 <p className="text-xs opacity-70 mt-1 text-right">
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
@@ -95,6 +192,7 @@ export function Chatbot() {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </ScrollArea>
 
       {/* Input */}
@@ -106,14 +204,19 @@ export function Chatbot() {
             onKeyDown={handleKeyDown}
             placeholder="Scrivi un messaggio..."
             className="flex-1"
+            disabled={isLoading}
           />
           <Button
             onClick={handleSendMessage}
-            disabled={!inputValue.trim()}
+            disabled={!inputValue.trim() || isLoading}
             size="icon"
             className="shrink-0"
           >
-            <Send className="h-4 w-4" />
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>

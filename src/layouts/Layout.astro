@@ -1,4 +1,6 @@
 ---
+import { Toaster } from '@/components/ui/toaster';
+
 interface Props {
   title?: string
   layout?: 'default' | 'dashboard'
@@ -152,6 +154,7 @@ const htmlClass = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : '';
   </head>
   <body class="min-h-screen bg-background font-sans antialiased transition-colors text-foreground">
     <slot />
+    <Toaster client:load />
   </body>
 </html>
 
