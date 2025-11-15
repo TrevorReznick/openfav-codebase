@@ -28,6 +28,108 @@ const config: Config = {
       },
       // Color tokens
       colors: {
+          // Migrated colors from astroflux-v4
+        border: "hsl(var(--color-border))",
+        input: "hsl(var(--color-input))",
+        ring: "hsl(var(--color-ring))",
+        background: "hsl(var(--color-background))",
+        foreground: "hsl(var(--color-foreground))",
+        DEFAULT: "hsl(var(--color-DEFAULT))",
+        hover: "hsl(var(--color-hover))",
+        background-color: "hsl(var(--color-background-color))",
+        text-color: "hsl(var(--color-text-color))",
+        primary-color: "hsl(var(--color-primary-color))",
+        primary-hover: "hsl(var(--color-primary-hover))",
+        secondary-color: "hsl(var(--color-secondary-color))",
+        accent-color: "hsl(var(--color-accent-color))",
+        card-bg: "hsl(var(--color-card-bg))",
+        card-border: "hsl(var(--color-card-border))",
+
+          // Migrated colors from astroflux-v4
+        border: "hsl(var(--color-border))",
+        input: "hsl(var(--color-input))",
+        ring: "hsl(var(--color-ring))",
+        background: "hsl(var(--color-background))",
+        foreground: "hsl(var(--color-foreground))",
+        DEFAULT: "hsl(var(--color-DEFAULT))",
+        hover: "hsl(var(--color-hover))",
+        background-color: "hsl(var(--color-background-color))",
+        text-color: "hsl(var(--color-text-color))",
+        primary-color: "hsl(var(--color-primary-color))",
+        primary-hover: "hsl(var(--color-primary-hover))",
+        secondary-color: "hsl(var(--color-secondary-color))",
+        accent-color: "hsl(var(--color-accent-color))",
+        card-bg: "hsl(var(--color-card-bg))",
+        card-border: "hsl(var(--color-card-border))",
+
+          // Migrated colors from astroflux-v4
+        border: "hsl(var(--color-border))",
+        input: "hsl(var(--color-input))",
+        ring: "hsl(var(--color-ring))",
+        background: "hsl(var(--color-background))",
+        foreground: "hsl(var(--color-foreground))",
+        DEFAULT: "hsl(var(--color-DEFAULT))",
+        hover: "hsl(var(--color-hover))",
+        background-color: "hsl(var(--color-background-color))",
+        text-color: "hsl(var(--color-text-color))",
+        primary-color: "hsl(var(--color-primary-color))",
+        primary-hover: "hsl(var(--color-primary-hover))",
+        secondary-color: "hsl(var(--color-secondary-color))",
+        accent-color: "hsl(var(--color-accent-color))",
+        card-bg: "hsl(var(--color-card-bg))",
+        card-border: "hsl(var(--color-card-border))",
+
+          // Migrated colors from astroflux-v4
+        border: "hsl(var(--color-border))",
+        input: "hsl(var(--color-input))",
+        ring: "hsl(var(--color-ring))",
+        background: "hsl(var(--color-background))",
+        foreground: "hsl(var(--color-foreground))",
+        DEFAULT: "hsl(var(--color-DEFAULT))",
+        hover: "hsl(var(--color-hover))",
+        background-color: "hsl(var(--color-background-color))",
+        text-color: "hsl(var(--color-text-color))",
+        primary-color: "hsl(var(--color-primary-color))",
+        primary-hover: "hsl(var(--color-primary-hover))",
+        secondary-color: "hsl(var(--color-secondary-color))",
+        accent-color: "hsl(var(--color-accent-color))",
+        card-bg: "hsl(var(--color-card-bg))",
+        card-border: "hsl(var(--color-card-border))",
+
+          // Migrated colors from astroflux-v4
+        border: "hsl(var(--color-border))",
+        input: "hsl(var(--color-input))",
+        ring: "hsl(var(--color-ring))",
+        background: "hsl(var(--color-background))",
+        foreground: "hsl(var(--color-foreground))",
+        DEFAULT: "hsl(var(--color-DEFAULT))",
+        hover: "hsl(var(--color-hover))",
+        background-color: "hsl(var(--color-background-color))",
+        text-color: "hsl(var(--color-text-color))",
+        primary-color: "hsl(var(--color-primary-color))",
+        primary-hover: "hsl(var(--color-primary-hover))",
+        secondary-color: "hsl(var(--color-secondary-color))",
+        accent-color: "hsl(var(--color-accent-color))",
+        card-bg: "hsl(var(--color-card-bg))",
+        card-border: "hsl(var(--color-card-border))",
+
+          // Migrated colors from astroflux-v4
+        border: "hsl(var(--color-border))",
+        input: "hsl(var(--color-input))",
+        ring: "hsl(var(--color-ring))",
+        background: "hsl(var(--color-background))",
+        foreground: "hsl(var(--color-foreground))",
+        DEFAULT: "hsl(var(--color-DEFAULT))",
+        hover: "hsl(var(--color-hover))",
+        background-color: "hsl(var(--color-background-color))",
+        text-color: "hsl(var(--color-text-color))",
+        primary-color: "hsl(var(--color-primary-color))",
+        primary-hover: "hsl(var(--color-primary-hover))",
+        secondary-color: "hsl(var(--color-secondary-color))",
+        accent-color: "hsl(var(--color-accent-color))",
+        card-bg: "hsl(var(--color-card-bg))",
+        card-border: "hsl(var(--color-card-border))",
+
         // Color tokens from design system
         ...Object.fromEntries(
           Object.entries(designTokens.colors).map(([key]) => [key, `var(--color-${key})`])
@@ -73,6 +175,58 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+          // Migrated keyframes from astroflux-v4
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "fade-in-slow": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        },
+        "0%, 100%": {
+          "50%": { transform: "translateY(-10px)" }
+        },
+
+          // Migrated keyframes from astroflux-v4
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "fade-in-slow": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        },
+        "0%, 100%": {
+          "50%": { transform: "translateY(-10px)" }
+        },
+
+          // Migrated keyframes from astroflux-v4
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "fade-in-slow": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        },
+        "0%, 100%": {
+          "50%": { transform: "translateY(-10px)" }
+        },
+
+          // Migrated keyframes from astroflux-v4
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "fade-in-slow": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        },
+        "0%, 100%": {
+          "50%": { transform: "translateY(-10px)" }
+        },
+
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -83,6 +237,22 @@ const config: Config = {
         },
       },
       animation: {
+          // Migrated animations from astroflux-v4
+          "fade-in": "fade-in 0.6s ease-out",
+          "fade-in-slow": "fade-in-slow 0.8s ease-out",
+
+          // Migrated animations from astroflux-v4
+          "fade-in": "fade-in 0.6s ease-out",
+          "fade-in-slow": "fade-in-slow 0.8s ease-out",
+
+          // Migrated animations from astroflux-v4
+          "fade-in": "fade-in 0.6s ease-out",
+          "fade-in-slow": "fade-in-slow 0.8s ease-out",
+
+          // Migrated animations from astroflux-v4
+          "fade-in": "fade-in 0.6s ease-out",
+          "fade-in-slow": "fade-in-slow 0.8s ease-out",
+
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },

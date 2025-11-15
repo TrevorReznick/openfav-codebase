@@ -10,6 +10,111 @@
 
 @layer base {
   :root {
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: 262 83% 58%;
+  --color-hover: 263 70% 50%;
+  --color-background-color: 222 47% 11%;
+  --color-text-color: 0 0% 100%;
+  --color-primary-color: 262 83% 58%;
+  --color-primary-hover: 263 70% 50%;
+  --color-secondary-color: 217 33% 17%;
+  --color-accent-color: 271 91% 65%;
+  --color-card-bg: 217 33% 17% / 0.3;
+  --color-card-border: 0 0% 100% / 0.1;
+
+    /* Design Tokens - Typography (migrated) */
+  --text-color: #FFFFFF;
+
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: 262 83% 58%;
+  --color-hover: 263 70% 50%;
+  --color-background-color: 222 47% 11%;
+  --color-text-color: 0 0% 100%;
+  --color-primary-color: 262 83% 58%;
+  --color-primary-hover: 263 70% 50%;
+  --color-secondary-color: 217 33% 17%;
+  --color-accent-color: 271 91% 65%;
+  --color-card-bg: 217 33% 17% / 0.3;
+  --color-card-border: 0 0% 100% / 0.1;
+
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: 262 83% 58%;
+  --color-hover: 263 70% 50%;
+  --color-background-color: 222 47% 11%;
+  --color-text-color: 0 0% 100%;
+  --color-primary-color: 262 83% 58%;
+  --color-primary-hover: 263 70% 50%;
+  --color-secondary-color: 217 33% 17%;
+  --color-accent-color: 271 91% 65%;
+  --color-card-bg: 217 33% 17% / 0.3;
+  --color-card-border: 0 0% 100% / 0.1;
+
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: 262 83% 58%;
+  --color-hover: 263 70% 50%;
+  --color-background-color: 222 47% 11%;
+  --color-text-color: 0 0% 100%;
+  --color-primary-color: 262 83% 58%;
+  --color-primary-hover: 263 70% 50%;
+  --color-secondary-color: 217 33% 17%;
+  --color-accent-color: 271 91% 65%;
+  --color-card-bg: 217 33% 17% / 0.3;
+  --color-card-border: 0 0% 100% / 0.1;
+
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: 262 83% 58%;
+  --color-hover: 263 70% 50%;
+  --color-background-color: 222 47% 11%;
+  --color-text-color: 0 0% 100%;
+  --color-primary-color: 262 83% 58%;
+  --color-primary-hover: 263 70% 50%;
+  --color-secondary-color: 217 33% 17%;
+  --color-accent-color: 271 91% 65%;
+  --color-card-bg: 217 33% 17% / 0.3;
+  --color-card-border: 0 0% 100% / 0.1;
+
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: 262 83% 58%;
+  --color-hover: 263 70% 50%;
+  --color-background-color: 222 47% 11%;
+  --color-text-color: 0 0% 100%;
+  --color-primary-color: 262 83% 58%;
+  --color-primary-hover: 263 70% 50%;
+  --color-secondary-color: 217 33% 17%;
+  --color-accent-color: 271 91% 65%;
+  --color-card-bg: 217 33% 17% / 0.3;
+  --color-card-border: 0 0% 100% / 0.1;
+
     /* Design Tokens - Colors */
     --color-primary: 0 0% 9%;
     --color-secondary: 0 0% 96.1%;
