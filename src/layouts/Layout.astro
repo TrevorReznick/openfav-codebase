@@ -1,7 +1,8 @@
 ---
+// TypeScript interface for component props
 interface Props {
-  title?: string
-  layout?: 'default' | 'dashboard'
+  title?: string;
+  layout?: 'default' | 'dashboard';
   description?: string;
 }
 
@@ -10,8 +11,9 @@ const { title = 'OpenFav', description = 'Your favorite open source projects' } 
 
 // Get the theme from cookies or default to system
 let theme = 'system';
-if (Astro.cookies.has('theme')) {
-  theme = Astro.cookies.get('theme').value;
+const themeCookie = Astro.cookies.get('theme');
+if (themeCookie && themeCookie.value) {
+  theme = themeCookie.value;
 }
 
 // Log the theme
@@ -189,18 +191,21 @@ const htmlClass = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : '';
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.5);
+    background: hsl(var(--muted-foreground));
+    opacity: 0.5;
     border-radius: var(--radius);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.7);
+    background: hsl(var(--muted-foreground));
+    opacity: 0.7;
   }
 
   /* Selection styles */
   ::selection {
-    background: hsl(var(--primary) / 0.1);
-    color: hsl(var(--primary));
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    opacity: 0.1;
   }
 
   /* Focus styles */

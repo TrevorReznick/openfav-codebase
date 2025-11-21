@@ -1,43 +1,63 @@
-# Astro Starter Kit: Minimal
+# OpenFav Dev V0
 
-```sh
-npm create astro@latest -- --template minimal
-```
+This is a fresh installation of the OpenFav project with React components migrated from astroflux-V4.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Project Structure
 
-## 🚀 Project Structure
+- `/src/components` - React components from astroflux-V4
+- `/src/pages` - Next.js pages (including the migrated Index page)
+- `/src/styles` - Global styles and Tailwind configuration
+- `/src/react` - React-specific code and components
+- `/public` - Static assets
 
-Inside of your Astro project, you'll see the following folders and files:
+## Getting Started
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+2. Set up environment variables:
+   ```bash
+   cp .env.example .env.local
+   # Update the environment variables in .env.local
+   ```
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Dark Mode
 
-## 🧞 Commands
+The project is configured with dark mode by default. The theme is managed by the `ThemeProvider` in `src/react/providers/themeProvider.tsx`.
 
-All commands are run from the root of the project, from a terminal:
+## Styling
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+This project uses:
+- Tailwind CSS for utility-first styling
+- shadcn/ui components for UI elements
+- CSS variables for theming
 
-## 👀 Want to learn more?
+## Migrated Components
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The following components have been migrated from astroflux-V4:
+- All components from `/src/components`
+- The main Index page
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run test` - Run tests
+
+## Next Steps
+
+1. Review and update any hardcoded paths in the migrated components
+2. Test all functionality in the new environment
+3. Update any outdated dependencies
+4. Add any missing tests

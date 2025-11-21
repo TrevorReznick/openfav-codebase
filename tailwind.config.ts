@@ -21,212 +21,87 @@ const config: Config = {
       spacing: Object.fromEntries(
         Object.entries(designTokens.spacing).map(([key]) => [key, `var(--spacing-${key})`])
       ),
+      
       // Typography tokens
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
       },
+      
       // Color tokens
       colors: {
-          // Migrated colors from astroflux-v4
-        border: "hsl(var(--color-border))",
-        input: "hsl(var(--color-input))",
-        ring: "hsl(var(--color-ring))",
-        background: "hsl(var(--color-background))",
-        foreground: "hsl(var(--color-foreground))",
-        DEFAULT: "hsl(var(--color-DEFAULT))",
-        hover: "hsl(var(--color-hover))",
-        background-color: "hsl(var(--color-background-color))",
-        text-color: "hsl(var(--color-text-color))",
-        primary-color: "hsl(var(--color-primary-color))",
-        primary-hover: "hsl(var(--color-primary-hover))",
-        secondary-color: "hsl(var(--color-secondary-color))",
-        accent-color: "hsl(var(--color-accent-color))",
-        card-bg: "hsl(var(--color-card-bg))",
-        card-border: "hsl(var(--color-card-border))",
-
-          // Migrated colors from astroflux-v4
-        border: "hsl(var(--color-border))",
-        input: "hsl(var(--color-input))",
-        ring: "hsl(var(--color-ring))",
-        background: "hsl(var(--color-background))",
-        foreground: "hsl(var(--color-foreground))",
-        DEFAULT: "hsl(var(--color-DEFAULT))",
-        hover: "hsl(var(--color-hover))",
-        background-color: "hsl(var(--color-background-color))",
-        text-color: "hsl(var(--color-text-color))",
-        primary-color: "hsl(var(--color-primary-color))",
-        primary-hover: "hsl(var(--color-primary-hover))",
-        secondary-color: "hsl(var(--color-secondary-color))",
-        accent-color: "hsl(var(--color-accent-color))",
-        card-bg: "hsl(var(--color-card-bg))",
-        card-border: "hsl(var(--color-card-border))",
-
-          // Migrated colors from astroflux-v4
-        border: "hsl(var(--color-border))",
-        input: "hsl(var(--color-input))",
-        ring: "hsl(var(--color-ring))",
-        background: "hsl(var(--color-background))",
-        foreground: "hsl(var(--color-foreground))",
-        DEFAULT: "hsl(var(--color-DEFAULT))",
-        hover: "hsl(var(--color-hover))",
-        background-color: "hsl(var(--color-background-color))",
-        text-color: "hsl(var(--color-text-color))",
-        primary-color: "hsl(var(--color-primary-color))",
-        primary-hover: "hsl(var(--color-primary-hover))",
-        secondary-color: "hsl(var(--color-secondary-color))",
-        accent-color: "hsl(var(--color-accent-color))",
-        card-bg: "hsl(var(--color-card-bg))",
-        card-border: "hsl(var(--color-card-border))",
-
-          // Migrated colors from astroflux-v4
-        border: "hsl(var(--color-border))",
-        input: "hsl(var(--color-input))",
-        ring: "hsl(var(--color-ring))",
-        background: "hsl(var(--color-background))",
-        foreground: "hsl(var(--color-foreground))",
-        DEFAULT: "hsl(var(--color-DEFAULT))",
-        hover: "hsl(var(--color-hover))",
-        background-color: "hsl(var(--color-background-color))",
-        text-color: "hsl(var(--color-text-color))",
-        primary-color: "hsl(var(--color-primary-color))",
-        primary-hover: "hsl(var(--color-primary-hover))",
-        secondary-color: "hsl(var(--color-secondary-color))",
-        accent-color: "hsl(var(--color-accent-color))",
-        card-bg: "hsl(var(--color-card-bg))",
-        card-border: "hsl(var(--color-card-border))",
-
-          // Migrated colors from astroflux-v4
-        border: "hsl(var(--color-border))",
-        input: "hsl(var(--color-input))",
-        ring: "hsl(var(--color-ring))",
-        background: "hsl(var(--color-background))",
-        foreground: "hsl(var(--color-foreground))",
-        DEFAULT: "hsl(var(--color-DEFAULT))",
-        hover: "hsl(var(--color-hover))",
-        background-color: "hsl(var(--color-background-color))",
-        text-color: "hsl(var(--color-text-color))",
-        primary-color: "hsl(var(--color-primary-color))",
-        primary-hover: "hsl(var(--color-primary-hover))",
-        secondary-color: "hsl(var(--color-secondary-color))",
-        accent-color: "hsl(var(--color-accent-color))",
-        card-bg: "hsl(var(--color-card-bg))",
-        card-border: "hsl(var(--color-card-border))",
-
-          // Migrated colors from astroflux-v4
-        border: "hsl(var(--color-border))",
-        input: "hsl(var(--color-input))",
-        ring: "hsl(var(--color-ring))",
-        background: "hsl(var(--color-background))",
-        foreground: "hsl(var(--color-foreground))",
-        DEFAULT: "hsl(var(--color-DEFAULT))",
-        hover: "hsl(var(--color-hover))",
-        background-color: "hsl(var(--color-background-color))",
-        text-color: "hsl(var(--color-text-color))",
-        primary-color: "hsl(var(--color-primary-color))",
-        primary-hover: "hsl(var(--color-primary-hover))",
-        secondary-color: "hsl(var(--color-secondary-color))",
-        accent-color: "hsl(var(--color-accent-color))",
-        card-bg: "hsl(var(--color-card-bg))",
-        card-border: "hsl(var(--color-card-border))",
-
-        // Color tokens from design system
-        ...Object.fromEntries(
-          Object.entries(designTokens.colors).map(([key]) => [key, `var(--color-${key})`])
-        ),
-        // Component colors
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        // Base colors with alpha support
+        border: "hsl(var(--color-border) / <alpha-value>)",
+        input: "hsl(var(--color-input) / <alpha-value>)",
+        ring: "hsl(var(--color-ring) / <alpha-value>)",
+        
+        // Background colors
+        background: {
+          DEFAULT: "hsl(var(--color-background) / <alpha-value>)",
+          color: "hsl(var(--color-background-color) / <alpha-value>)",
+        },
+        
+        // Text colors
+        foreground: "hsl(var(--color-foreground) / <alpha-value>)",
+        text: {
+          color: "hsl(var(--color-text-color) / <alpha-value>)",
+        },
+        
+        // Primary colors
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))"
+          DEFAULT: "hsl(var(--color-primary-color) / <alpha-value>)",
+          hover: "hsl(var(--color-primary-hover) / <alpha-value>)",
+          foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
         },
+        
+        // Secondary colors
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))"
+          DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
+          foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
         },
+        
+        // Destructive colors
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))"
+          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
         },
+        
+        // Muted colors
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))"
+          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
         },
+        
+        // Accent colors
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))"
+          DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))"
-        },
+        
+        // Card colors
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))"
-        }
+          DEFAULT: "hsl(var(--card) / <alpha-value>)",
+          foreground: "hsl(var(--card-foreground) / <alpha-value>)",
+          bg: "hsl(var(--color-card-bg) / <alpha-value>)",
+          border: "hsl(var(--color-card-border) / <alpha-value>)",
+        },
+        
+        // Popover colors
+        popover: {
+          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
+        },
       },
+      
+      // Border radius
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      
+      // Keyframes
       keyframes: {
-          // Migrated keyframes from astroflux-v4
-        "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
-        },
-        "fade-in-slow": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" }
-        },
-        "0%, 100%": {
-          "50%": { transform: "translateY(-10px)" }
-        },
-
-          // Migrated keyframes from astroflux-v4
-        "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
-        },
-        "fade-in-slow": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" }
-        },
-        "0%, 100%": {
-          "50%": { transform: "translateY(-10px)" }
-        },
-
-          // Migrated keyframes from astroflux-v4
-        "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
-        },
-        "fade-in-slow": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" }
-        },
-        "0%, 100%": {
-          "50%": { transform: "translateY(-10px)" }
-        },
-
-          // Migrated keyframes from astroflux-v4
-        "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
-        },
-        "fade-in-slow": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" }
-        },
-        "0%, 100%": {
-          "50%": { transform: "translateY(-10px)" }
-        },
-
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -236,33 +111,27 @@ const config: Config = {
           to: { height: "0" },
         },
       },
+      
+      // Animation
       animation: {
-          // Migrated animations from astroflux-v4
-          "fade-in": "fade-in 0.6s ease-out",
-          "fade-in-slow": "fade-in-slow 0.8s ease-out",
-
-          // Migrated animations from astroflux-v4
-          "fade-in": "fade-in 0.6s ease-out",
-          "fade-in-slow": "fade-in-slow 0.8s ease-out",
-
-          // Migrated animations from astroflux-v4
-          "fade-in": "fade-in 0.6s ease-out",
-          "fade-in-slow": "fade-in-slow 0.8s ease-out",
-
-          // Migrated animations from astroflux-v4
-          "fade-in": "fade-in 0.6s ease-out",
-          "fade-in-slow": "fade-in-slow 0.8s ease-out",
-
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      
+      // Additional theme extensions can be added here
+      ...Object.fromEntries(
+        Object.entries(designTokens.colors || {}).map(([key]) => [
+          key, 
+          `hsl(var(--color-${key}) / <alpha-value>)`
+        ])
+      ),
     },
   },
   plugins: [
     require("tailwindcss-animate"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
-    require("@tailwindcss/aspect-ratio"),
+    // Add other plugins here
   ],
 };
 

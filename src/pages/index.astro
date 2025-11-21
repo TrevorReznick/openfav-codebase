@@ -1,6 +1,7 @@
 ---
 import Head from '@/components/head/OpenFavHead.astro'
 import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/home/Hero';
 
 // Import the config to test if it's working
 import { SITE, I18N, METADATA, UI, ANALYTICS } from 'openfav:config';
@@ -12,10 +13,10 @@ console.log({ SITE, I18N, METADATA, UI, ANALYTICS });
 <Layout>
   <Head />
   
-  <main class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold mb-6">Welcome to OpenFav Test Site</h1>
+  <main>
+    <Hero client:load />
     
-    <section class="mb-8">
+    <section class="container mx-auto px-4 py-8">
       <h2 class="text-2xl font-semibold mb-4">About This Page</h2>
       <p class="mb-4">
         This is a test page to verify OpenFav integration with Astro. The page includes SEO meta tags,

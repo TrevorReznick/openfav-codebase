@@ -1,110 +1,96 @@
-import React from "react";
+import * as React from 'react';
+import { Rocket, Zap, Box, Trophy } from 'lucide-react';
 
-const App = () => {
-  // Dati per l'elenco di attività
-  const activities = [
-    { id: 1, task: "Inviare report mensile" },
-    { id: 2, task: "Chiamare il cliente X" },
-    { id: 3, task: "Aggiornare il database" },
+type IconType = React.ComponentType<{ className?: string }>;
+
+const FeatureCard: React.FC<{ 
+  icon: IconType; 
+  title: string; 
+  description: string 
+}> = ({ 
+  icon: Icon, 
+  title, 
+  description 
+}) => (
+  <div className="p-6 rounded-lg bg-white/5 border border-white/10 hover:border-primary/50 transition-colors">
+    <div className="h-12 w-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+      <Icon className="h-6 w-6 text-primary" />
+    </div>
+    <h3 className="text-lg font-semibold mb-2 text-white">{title}</h3>
+    <p className="text-white/70">{description}</p>
+  </div>
+);
+
+const Index: React.FC = () => {
+  const features = [
+    {
+      icon: Rocket,
+      title: "Lightning Fast",
+      description: "Experience blazing fast performance with our optimized stack."
+    },
+    {
+      icon: Zap,
+      title: "Easy to Use",
+      description: "Intuitive interface that gets you up and running in minutes."
+    },
+    {
+      icon: Box,
+      title: "Powerful Features",
+      description: "All the tools you need to manage your content effectively."
+    },
+    {
+      icon: Trophy,
+      title: "Award Winning",
+      description: "Recognized by industry leaders for excellence in design."
+    }
   ];
 
   return (
-    <div style={styles.dashboardContainer}>
-      <h1 style={styles.header}>Dashboard</h1>
-      <div style={styles.content}>
-        {/* Statistiche */}
-        <div style={styles.statsContainer}>
-          <div style={styles.statBox}>
-            <h3 style={styles.statTitle}>Vendite totali</h3>
-            <p style={styles.statValue}>$50,000</p>
-          </div>
-          <div style={styles.statBox}>
-            <h3 style={styles.statTitle}>Clienti attivi</h3>
-            <p style={styles.statValue}>120</p>
-          </div>
-          <div style={styles.statBox}>
-            <h3 style={styles.statTitle}>Compiti completati</h3>
-            <p style={styles.statValue}>8/10</p>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">
+            Welcome to Our Platform
+          </h1>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Build amazing experiences with our powerful tools and services. Get started today and transform your ideas into reality.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/signup"
+              className="px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-colors inline-block"
+            >
+              Get Started
+            </a>
+            <a
+              href="#features"
+              className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium transition-colors inline-block"
+            >
+              Learn More
+            </a>
           </div>
         </div>
-
-        {/* Elenco attività */}
-        <div style={styles.activitiesContainer}>
-          <h3 style={styles.sectionTitle}>Attività recenti</h3>
-          <ul style={styles.activityList}>
-            {activities.map((activity) => (
-              <li key={activity.id} style={styles.activityItem}>
-                {activity.task}
-              </li>
+        <section className="py-16">
+          <h2 className="text-3xl font-bold text-center mb-12">Amazing Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <FeatureCard 
+                key={index}
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+              />
             ))}
-          </ul>
-        </div>
+          </div>
+        </section>
       </div>
+      <footer className="border-t border-white/10 py-8">
+        <div className="container mx-auto px-4 text-center text-white/60">
+          <p> 2024 OpenFav. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default App;
-
-// Stili definiti come oggetti JavaScript
-const styles = {
-  dashboardContainer: {
-    fontFamily: "Arial, sans-serif",
-    padding: "20px",
-    backgroundColor: "#f4f4f9",
-    minHeight: "100vh",
-  },
-  header: {
-    textAlign: "center",
-    color: "#333",
-  },
-  content: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "20px",
-  },
-  statsContainer: {
-    display: "flex",
-    gap: "20px",
-    justifyContent: "space-between",
-  },
-  statBox: {
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    textAlign: "center",
-  },
-  statTitle: {
-    margin: "0 0 10px",
-    fontSize: "16px",
-    color: "#555",
-  },
-  statValue: {
-    margin: "0",
-    fontSize: "20px",
-    fontWeight: "bold",
-    color: "#333",
-  },
-  activitiesContainer: {
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  },
-  sectionTitle: {
-    marginBottom: "10px",
-    fontSize: "18px",
-    color: "#333",
-  },
-  activityList: {
-    listStyleType: "none",
-    padding: "0",
-  },
-  activityItem: {
-    backgroundColor: "#f9f9f9",
-    marginBottom: "5px",
-    padding: "10px",
-    borderRadius: "4px",
-  },
-};
+export default Index;
