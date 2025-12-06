@@ -6,111 +6,116 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+
+
+
+
+
+
 }
 
 @layer base {
   :root {
-    /* Design Tokens - Colors */
-    --color-primary: 0 0% 9%;
-    --color-secondary: 0 0% 96.1%;
-    --color-success: 142.1 76.2% 36.3%;
-    --color-danger: 0 84.2% 60.2%;
-    --color-warning: 38 92% 50%;
-    --color-info: 199 89% 48%;
-    
-    /* Design Tokens - Spacing */
-    --spacing-0: 0px;
-    --spacing-1: 0.25rem;
-    --spacing-2: 0.5rem;
-    --spacing-3: 0.75rem;
-    --spacing-4: 1rem;
-    --spacing-5: 1.25rem;
-    --spacing-6: 1.5rem;
-    --spacing-8: 2rem;
-    --spacing-10: 2.5rem;
-    --spacing-12: 3rem;
-    --spacing-16: 4rem;
-    --spacing-20: 5rem;
-    --spacing-24: 6rem;
-    --spacing-32: 8rem;
+    /* Design Tokens - Colors (migrated) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-DEFAULT: hsl(262 83% 58%);
+  --color-hover: hsl(263 70% 50%);
+  --color-background-color: hsl(222 47% 11%);
+  --color-text-color: hsl(0 0% 100%);
+  --color-primary-color: hsl(262 83% 58%);
+  --color-primary-hover: hsl(263 70% 50%);
+  --color-secondary-color: hsl(217 33% 17%);
+  --color-accent-color: hsl(271 91% 65%);
+  --color-card-bg: hsl(217 33% 17% / 0.3);
+  --color-card-border: hsl(0 0% 100% / 0.1);
 
-    /* Design Tokens - Typography */
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-mono: 'Roboto Mono', monospace;
-    --font-size-sm: 0.875rem;
-    --font-size-base: 1rem;
-    --font-size-lg: 1.125rem;
-
-    /* Theme Variables */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Custom Variables */
+--spacing-0: 0px;
+--spacing-1: 0.25rem;
+--spacing-2: 0.5rem;
+--spacing-3: 0.75rem;
+--spacing-4: 1rem;
+--spacing-5: 1.25rem;
+--spacing-6: 1.5rem;
+--spacing-8: 2rem;
+--spacing-10: 2.5rem;
+--spacing-12: 3rem;
+--spacing-16: 4rem;
+--spacing-20: 5rem;
+--spacing-24: 6rem;
+--spacing-32: 8rem;
+--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+--font-mono: 'Roboto Mono', monospace;
+--font-size-sm: 0.875rem;
+--font-size-base: 1rem;
+--font-size-lg: 1.125rem;
+--card: 0 0% 100%;
+--card-foreground: 0 0% 3.9%;
+--popover: 0 0% 100%;
+--popover-foreground: 0 0% 3.9%;
+--chart-1: 12 76% 61%;
+--chart-2: 173 58% 39%;
+--chart-3: 197 37% 24%;
+--chart-4: 43 74% 66%;
+--chart-5: 27 87% 67%;
+--sidebar-background: 0 0% 98%;
+--sidebar-foreground: 240 5.3% 26.1%;
+--sidebar-primary: 240 5.9% 10%;
+--sidebar-primary-foreground: 0 0% 98%;
+--sidebar-accent: 240 4.8% 95.9%;
+--sidebar-accent-foreground: 240 5.9% 10%;
+--sidebar-border: 220 13% 91%;
+--sidebar-ring: 217.2 91.2% 59.8%;
+--card: 0 0% 3.9%;
+--card-foreground: 0 0% 98%;
+--popover: 0 0% 3.9%;
+--popover-foreground: 0 0% 98%;
+--chart-1: 220 70% 50%;
+--chart-2: 160 60% 45%;
+--chart-3: 30 80% 55%;
+--chart-4: 280 65% 60%;
+--chart-5: 340 75% 55%;
+--sidebar-background: 240 5.9% 10%;
+--sidebar-foreground: 240 4.8% 95.9%;
+--sidebar-primary: 224.3 76.3% 48%;
+--sidebar-primary-foreground: 0 0% 100%;
+--sidebar-accent: 240 3.7% 15.9%;
+--sidebar-accent-foreground: 240 4.8% 95.9%;
+--sidebar-border: 240 3.7% 15.9%;
+--sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -122,3 +127,6 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
