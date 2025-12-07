@@ -4,11 +4,14 @@ import type { ComponentType } from 'react'
 const COMPONENT_BASES = {
   // Percorsi diretti per specifici "moduli" dell'app
   auth: '/src/react/components/auth',
+  components: '/src/react/components',
+  common: '/src/react/components/common',
   dashboard: '/src/react/components/dashboard',
   examples: '/src/react/components/examples',
-  common: '/src/react/components/common',
+  'new-index': '/src/react/components/new-index',
+  new_index: '/src/react/components/new-index',
   // Fallback: cartella principale dei componenti
-  components: '/src/react/components',
+  
   test: '/src/react/components/test',
 } as const
 
