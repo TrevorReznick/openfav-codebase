@@ -51,7 +51,7 @@ export default defineConfig({
         '@': path.resolve(__dirname, './src'),
         '~': path.resolve(__dirname, './src'),
         // Add alias for design tokens
-        '@/migration/design-system/tokens': path.resolve(__dirname, './src/migration/design-system/tokens')
+        //'@/migration/design-system/tokens': path.resolve(__dirname, './src/migration/design-system/tokens')
       }
     },
     plugins: [
