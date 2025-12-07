@@ -47,5 +47,32 @@ console.log({ SITE, I18N, METADATA, UI, ANALYTICS });
         </ul>
       </div>
     </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Developer Links</h2>
+      <p class="mb-4 text-gray-700">
+        Internal pages useful for development and debugging. These routes non sono pensate per l'utente finale.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 class="text-xl font-semibold mb-3">Test Pages</h3>
+          <ul class="space-y-2 text-blue-600">
+            <li><a href="/dev/test/components-test" class="hover:underline">/dev/test/components-test</a></li>
+            <li><a href="/dev/test/load-components" class="hover:underline">/dev/test/load-components</a></li>
+            <li><a href="/dev/test/playground" class="hover:underline">/dev/test/playground</a></li>
+            <li><a href="/dev/test/supabase" class="hover:underline">/dev/test/supabase</a></li>
+            <li><a href="/tokens" class="hover:underline">/tokens (Design Tokens Test)</a></li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h3 class="text-xl font-semibold mb-3">Example Pages</h3>
+          <ul class="space-y-2 text-blue-600">
+            <li><a href="/dev/examples/test" class="hover:underline">/dev/examples/test</a></li>
+            <li><a href="/dev/examples/test-component" class="hover:underline">/dev/examples/test-component</a></li>
+            <li><a href="/build/new-index" class="hover:underline">/build/new-index (Dynamic NewIndex)</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
   </main>
 </Layout>
